@@ -29,7 +29,17 @@ def init_db():
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
                 password VARCHAR(100) NOT NULL
-            )
+            );
+            CREATE TABLE IF NOT EXISTS scores (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(50) NOT NULL,
+                game_id VARCHAR(50) NOT NULL,
+                score INT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            -- การสร้าง Composite Index สำหรับ Leaderboard (game_id, score DESC)
+            CREATE INDEX IF NOT EXISTS idx_scores_game_score ON scores (game_id, score DESC);
+            CREATE INDEX IF NOT EXISTS idx_scores_score_desc ON scores (score DESC);
         """)
         conn.commit()
         cursor.close()
@@ -55,6 +65,11 @@ class ChangePasswordRequest(BaseModel):
 class UserUpdate(BaseModel):
     username: str
     password: str
+
+class ScoreSubmit(BaseModel):
+    username: str
+    game_id: str
+    score: int
 
 
 # ==========================================
@@ -84,6 +99,9 @@ def login(user: UserCreate):
     try:
         conn = get_db()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
+        # ความรู้จาก Lab: ไม่จำเป็นต้องทำ Composite Index ควบ (username, password) 
+        # เพราะ username เป็น UNIQUE มี Index อัตโนมัติและค่าไม่ซ้ำ (High Cardinality)
+        # Database จะใช้ Index ของ username เพื่อหา 1 row ได้อย่างรวดเร็วอยู่แล้ว
         cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (user.username, user.password))
         db_user = cursor.fetchone()
         cursor.close()
@@ -165,7 +183,9 @@ def get_all_users(limit: int = 10, offset: int = 0):
     try:
         conn = get_db()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
-        cursor.execute("SELECT id, username FROM users LIMIT %s OFFSET %s", (limit, offset))
+        # ความรู้จาก Lab: การดึงข้อมูลแบบมี LIMIT, OFFSET ควรมี ORDER BY เพื่อผลลัพธ์ที่แน่นอน 
+        # ในที่นี้ ORDER BY id จะใช้ประโยชน์จาก Primary Key Index ทำให้ไม่ต้องไป Sort เอง
+        cursor.execute("SELECT id, username FROM users ORDER BY id LIMIT %s OFFSET %s", (limit, offset))
         users = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -212,5 +232,79 @@ def check_username(name: str):
         if exists:
             return {"available": False, "message": "Username นี้ถูกใช้งานแล้ว"}
         return {"available": True, "message": "Username นี้สามารถใช้งานได้"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==========================================
+# 3. Leaderboard System (ระบบตารางคะแนน)
+# ==========================================
+
+@app.post("/scores")
+def submit_score(data: ScoreSubmit):
+    if data.score < 0:
+        raise HTTPException(status_code=400, detail="คะแนนต้องไม่ติดลบ")
+    try:
+        conn = get_db()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute(
+            "INSERT INTO scores (username, game_id, score) VALUES (%s, %s, %s) RETURNING id, username, game_id, score, created_at",
+            (data.username, data.game_id, data.score)
+        )
+        new_score = cursor.fetchone()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return {"message": "บันทึกคะแนนสำเร็จ!", "data": new_score}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/leaderboard")
+def get_leaderboard(game_id: str = None, limit: int = 10):
+    try:
+        conn = get_db()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        # ความรู้จาก Lab: การ Query ตารางคะแนนร่วมกับ ORDER BY score DESC LIMIT n
+        # จะทำงานได้อย่างรวดเร็วเพราะใช้ประโยชน์จาก Composite Index (game_id, score DESC)
+        if game_id and game_id != "all":
+            cursor.execute("""
+                SELECT username, game_id, MAX(score) as high_score, MAX(created_at) as latest_date
+                FROM scores
+                WHERE game_id = %s
+                GROUP BY username, game_id
+                ORDER BY high_score DESC
+                LIMIT %s
+            """, (game_id, limit))
+        else:
+            cursor.execute("""
+                SELECT username, MAX(score) as high_score, COUNT(id) as total_games, MAX(created_at) as latest_date
+                FROM scores
+                GROUP BY username
+                ORDER BY high_score DESC
+                LIMIT %s
+            """, (limit,))
+        leaderboard = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return {"leaderboard": leaderboard, "game_id": game_id or "all"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/my-scores")
+def get_my_scores(username: str):
+    try:
+        conn = get_db()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor.execute("""
+            SELECT game_id, MAX(score) as best_score, COUNT(id) as played_count
+            FROM scores
+            WHERE username = %s
+            GROUP BY game_id
+            ORDER BY best_score DESC
+        """, (username,))
+        scores = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return {"username": username, "scores": scores}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

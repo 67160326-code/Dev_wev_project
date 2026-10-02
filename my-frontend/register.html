@@ -3,94 +3,171 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#09090b">
     <title>FacePlay - Register</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background: #121212;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .card {
-            background: #1e1e1e;
-            padding: 30px;
-            border-radius: 12px;
-            width: 320px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at 50% 25%, #181822 0%, #09090b 75%);
+      color: #fafafa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 16px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: 1px solid #333;
-            background: #2a2a2a;
-            color: #fff;
-            box-sizing: border-box;
-        }
+    .card {
+      background: linear-gradient(180deg, rgba(22, 22, 28, 0.95) 0%, rgba(14, 14, 18, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 38px 28px;
+      border-radius: 22px;
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #059669;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 5px;
-        }
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
 
-        button:hover {
-            background: #047857;
-        }
+    .brand-subtitle {
+      font-size: 13px;
+      color: #71717a;
+      margin-bottom: 24px;
+    }
 
-        .btn-back {
-            background: #4b5563;
-            margin-top: 10px;
-        }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
 
-        .btn-back:hover {
-            background: #374151;
-        }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #27272a;
+      background: #18181b;
+      color: #fafafa;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
 
-        #msg {
-            margin-top: 10px;
-            font-size: 13px;
-        }
-    </style>
+    input::placeholder {
+      color: #52525b;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #71717a;
+      background: #1e1e24;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ffffff;
+      border-bottom: 3.5px solid #a1a1aa;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
+      color: #09090b;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 18px -4px rgba(255, 255, 255, 0.25), inset 0 1px 0 #ffffff;
+      transition: all 0.15s ease-out;
+    }
+
+    .btn-submit:hover {
+      background: #ffffff;
+      border-bottom-color: #71717a;
+      box-shadow: 0 10px 22px -3px rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-submit:active {
+      transform: translateY(2.5px);
+      border-bottom-width: 1px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-back {
+      width: 100%;
+      padding: 11px;
+      margin-top: 10px;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      background: rgba(24, 24, 27, 0.6);
+      color: #a1a1aa;
+      font-weight: 500;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      background: #27272a;
+      color: #ffffff;
+      border-color: #3f3f46;
+    }
+
+    #msg {
+      margin-top: 14px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="card">
-        <h2>สมัครสมาชิก</h2>
-        <input type="text" id="reg-user" placeholder="เลือก Username" oninput="checkUsernameAvailable()">
-        <input type="password" id="reg-pass" placeholder="ตั้งรหัสผ่าน">
-        <button onclick="submitRegister()">ยืนยันการสมัคร</button>
-        <button class="btn-back" onclick="window.location.href='index.html'">กลับหน้า Login</button>
-        <p id="msg"></p>
+  <div class="card">
+    <h1 class="brand-title">สร้างบัญชีผู้ใช้</h1>
+    <p class="brand-subtitle">สมัครสมาชิกเพื่อบันทึกสถิติคะแนน</p>
+
+    <div class="input-group">
+      <input type="text" id="reg-user" placeholder="เลือก Username" oninput="checkUsernameAvailable()" autocomplete="off">
+      <input type="password" id="reg-pass" placeholder="ตั้งรหัสผ่าน">
     </div>
 
+    <button class="btn-submit" onclick="submitRegister()">ยืนยันการสมัคร</button>
+    <button class="btn-back" onclick="window.location.href='index.html'">กลับสู่หน้าเข้าสู่ระบบ</button>
+    <p id="msg"></p>
+  </div>
+
     <script>
-        const API_URL = "http://localhost:8000";
+        const API_URL = (!window.location.hostname || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+            ? "http://localhost:8000"
+            : `${window.location.protocol === 'https:' ? 'https:' : 'http:'}//${window.location.hostname}:8000`;
 
         // ตรวจสอบ Username ว่าว่างไหม (GET /check-username/{name})
         async function checkUsernameAvailable() {
-            const name = document.getElementById("reg-user").value;
+            const name = document.getElementById("reg-user").value.trim();
             const msg = document.getElementById("msg");
             if (!name) { msg.innerText = ""; return; }
 
             try {
-                const res = await fetch(`${API_URL}/check-username/${name}`);
+                const res = await fetch(`${API_URL}/check-username/${encodeURIComponent(name)}`);
                 const data = await res.json();
-                if (res.available) {
+                if (data.available) {
                     msg.style.color = "#34d399";
                     msg.innerText = "✔️ " + data.message;
                 } else {
@@ -98,12 +175,12 @@
                     msg.innerText = "❌ " + data.message;
                 }
             } catch (e) {
-                console.error(e);
+                console.error("Username check error:", e);
             }
         }
 
         async function submitRegister() {
-            const username = document.getElementById("reg-user").value;
+            const username = document.getElementById("reg-user").value.trim();
             const password = document.getElementById("reg-pass").value;
             const msg = document.getElementById("msg");
 
@@ -113,6 +190,9 @@
                 return;
             }
 
+            msg.style.color = "#a1a1aa";
+            msg.innerText = "กำลังสร้างบัญชีผู้ใช้...";
+
             try {
                 const response = await fetch(`${API_URL}/register`, {
                     method: "POST",
@@ -121,8 +201,11 @@
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    alert("สมัครสมาชิกสำเร็จ! กำลังกลับไปหน้าล็อกอิน");
-                    window.location.href = "index.html";
+                    msg.style.color = "#34d399";
+                    msg.innerText = "สมัครสำเร็จ! กำลังไปหน้าล็อกอิน...";
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 800);
                 } else {
                     msg.style.color = "#f87171";
                     msg.innerText = data.detail || "สมัครไม่สำเร็จ";

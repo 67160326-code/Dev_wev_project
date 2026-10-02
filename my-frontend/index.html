@@ -3,74 +3,137 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#09090b">
   <title>FacePlay - Game Login</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at 50% 25%, #181822 0%, #09090b 75%);
+      color: #fafafa;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 16px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .card {
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-      width: 320px;
+      background: linear-gradient(180deg, rgba(22, 22, 28, 0.95) 0%, rgba(14, 14, 18, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 38px 28px;
+      border-radius: 22px;
+      width: 100%;
+      max-width: 350px;
       text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: relative;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      color: #4f46e5;
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: #71717a;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #333;
-      background: #2a2a2a;
-      color: #fff;
-      border-radius: 6px;
-      box-sizing: border-box;
+      padding: 12px 14px;
+      border: 1px solid #27272a;
+      background: #18181b;
+      color: #fafafa;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: border-color 0.2s, background-color 0.2s;
     }
 
-    button {
+    input::placeholder {
+      color: #52525b;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #71717a;
+      background: #1e1e24;
+    }
+
+    .btn-login {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 6px;
-      background: #4f46e5;
-      color: white;
-      font-weight: bold;
+      padding: 12px;
+      border: 1px solid #ffffff;
+      border-bottom: 3.5px solid #a1a1aa;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
+      color: #09090b;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
-      transition: background 0.2s;
+      box-shadow: 0 8px 18px -4px rgba(255, 255, 255, 0.25), inset 0 1px 0 #ffffff;
+      transition: all 0.15s ease-out;
     }
 
-    button:hover {
-      background: #4338ca;
+    .btn-login:hover {
+      background: #ffffff;
+      border-bottom-color: #71717a;
+      box-shadow: 0 10px 22px -3px rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-login:active {
+      transform: translateY(2.5px);
+      border-bottom-width: 1px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
 
     .btn-reg {
-      background: #059669;
-      margin-top: 5px;
+      width: 100%;
+      padding: 11px;
+      margin-top: 10px;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      background: rgba(24, 24, 27, 0.6);
+      color: #a1a1aa;
+      font-weight: 500;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     .btn-reg:hover {
-      background: #047857;
+      background: #27272a;
+      color: #ffffff;
+      border-color: #3f3f46;
     }
 
     #message {
-      margin-top: 15px;
-      font-size: 14px;
+      margin-top: 14px;
+      font-size: 13px;
+      min-height: 18px;
     }
   </style>
 </head>
@@ -78,22 +141,27 @@
 <body>
 
   <div class="card">
-    <h2>🎮 FacePlay Login</h2>
-    <input type="text" id="username" placeholder="ชื่อผู้ใช้งาน (Username)">
-    <input type="password" id="password" placeholder="รหัสผ่าน (Password)">
+    <h1 class="brand-title">FacePlay</h1>
+    <p class="brand-subtitle">เข้าสู่ระบบเพื่อเริ่มเล่นเกม</p>
 
-    <button onclick="handleLogin()">เข้าสู่ระบบ (Login)</button>
-    <!-- ปุ่มวาร์ปไปหน้าสมัครสมาชิก -->
-    <button class="btn-reg" onclick="window.location.href='register.html'">สมัครสมาชิก (Register)</button>
+    <div class="input-group">
+      <input type="text" id="username" placeholder="ชื่อผู้ใช้งาน (Username)" autocomplete="off">
+      <input type="password" id="password" placeholder="รหัสผ่าน (Password)">
+    </div>
+
+    <button class="btn-login" onclick="handleLogin()">เข้าสู่ระบบ</button>
+    <button class="btn-reg" onclick="window.location.href='register.html'">ยังไม่มีบัญชี? สมัครสมาชิก</button>
 
     <p id="message"></p>
   </div>
 
   <script>
-    const API_URL = "http://localhost:8000";
+    const API_URL = (!window.location.hostname || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+      ? "http://localhost:8000"
+      : `${window.location.protocol === 'https:' ? 'https:' : 'http:'}//${window.location.hostname}:8000`;
 
     async function handleLogin() {
-      const username = document.getElementById("username").value;
+      const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value;
       const msg = document.getElementById("message");
 
@@ -102,6 +170,9 @@
         msg.innerText = "กรุณากรอกข้อมูลให้ครบถ้วน!";
         return;
       }
+
+      msg.style.color = "#a1a1aa";
+      msg.innerText = "กำลังเข้าสู่ระบบ...";
 
       try {
         const response = await fetch(`${API_URL}/login`, {
@@ -117,7 +188,7 @@
           localStorage.setItem("faceplay_user", data.username);
           setTimeout(() => {
             window.location.href = "game.html";
-          }, 1000);
+          }, 600);
         } else {
           msg.style.color = "#f87171";
           msg.innerText = data.detail || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";

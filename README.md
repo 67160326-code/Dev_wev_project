@@ -4,7 +4,7 @@
 
 ---
 
-## 🎯 งานของเราืองานอะไร? (Project Overview & Core Scope)
+## 🎯 งานของเราคืองานอะไร? (Project Overview & Core Scope)
 **FacePlay** ไม่ใช่เป็นเพียงเว็บไซต์เกมทั่วไป แต่เป็น **Interactive WebAR Mini-Game Platform** ที่ถูกออกแบบมาเพื่อลบข้อจำกัดของการทำเว็บแอปพลิเคชันแบบดั้งเดิม โดยงานของเราครอบคลุมสัดส่วนการทำงานหลัก 3 ส่วนด้วยกัน:
 
 1. **Client-Side AI & WebAR Engine (หน้าบ้าน):** 
