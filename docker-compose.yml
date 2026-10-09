@@ -3,7 +3,9 @@ services:
   frontend:
     build: ./my-frontend
     ports:
-      - "8080:80"
+      - "3000:80"
+    volumes:
+      - ./my-frontend:/usr/share/nginx/html
 
   # กล่องหลังบ้าน (เหมือนเดิม)
   api:

@@ -150,12 +150,17 @@
     </div>
 
     <button class="btn-login" onclick="handleLogin()">เข้าสู่ระบบ</button>
+    <button class="btn-reg" onclick="playAsGuest()" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight: 600;">🎮 ทดลองเล่นทันที (โหมดทดสอบ)</button>
     <button class="btn-reg" onclick="window.location.href='register.html'">ยังไม่มีบัญชี? สมัครสมาชิก</button>
 
     <p id="message"></p>
   </div>
 
   <script>
+    function playAsGuest() {
+      localStorage.setItem("faceplay_user", "Tester_" + Math.floor(Math.random() * 899 + 100));
+      window.location.href = "game.html";
+    }
     const API_URL = (!window.location.hostname || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
       ? "http://localhost:8000"
       : `${window.location.protocol === 'https:' ? 'https:' : 'http:'}//${window.location.hostname}:8000`;
@@ -198,6 +203,10 @@
         msg.innerText = "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์หลังบ้านได้";
       }
     }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
   </script>
 </body>
 

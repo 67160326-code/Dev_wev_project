@@ -215,6 +215,10 @@
                 msg.innerText = "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้";
             }
         }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") submitRegister();
+        });
     </script>
 </body>
 

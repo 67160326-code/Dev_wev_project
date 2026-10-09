@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#09090b">
-    <title>FacePlay - Mobile & Web Arena</title>
+    <title>FacePlay - AI Face AR & Jump Arena</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
@@ -17,7 +18,8 @@
             --app-height: 100dvh;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
             height: 100dvh;
             touch-action: manipulation;
@@ -26,6 +28,9 @@
             user-select: none;
             overscroll-behavior: none;
             background-color: #060609;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         .hide-scrollbar::-webkit-scrollbar {
@@ -39,29 +44,21 @@
 
         /* Ambient Game Container */
         #appContainer {
-            background: radial-gradient(circle at 50% 15%, #1c1c24 0%, #09090b 75%);
+            background: radial-gradient(circle at 50% 20%, #1c1c24 0%, #09090b 75%);
         }
 
-        /* Device Chassis styling on Desktop */
-        @media (min-width: 768px) {
+        /* Responsive Device Cabinet (Auto-fits User's Device) */
+        @media (min-width: 769px) {
             .device-chassis {
-                border: 9px solid #1c1c24;
-                border-radius: 46px;
-                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12),
-                            0 25px 60px -12px rgba(0, 0, 0, 0.95),
-                            0 0 40px rgba(0, 0, 0, 0.6);
-            }
-            .notch-pill {
-                display: flex !important;
-            }
-            .home-bar {
-                display: flex !important;
-            }
-            .desktop-simulator-bar {
-                display: flex !important;
+                border: 2px solid rgba(255, 255, 255, 0.12);
+                border-radius: 36px;
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),
+                    0 25px 60px -12px rgba(0, 0, 0, 0.95),
+                    0 0 50px rgba(56, 189, 248, 0.08);
             }
         }
-        @media (max-width: 767px) {
+
+        @media (max-width: 768px) {
             .device-chassis {
                 border: none !important;
                 border-radius: 0 !important;
@@ -70,15 +67,6 @@
                 height: 100dvh !important;
                 max-width: none !important;
                 max-height: none !important;
-            }
-            .notch-pill {
-                display: none !important;
-            }
-            .home-bar {
-                display: none !important;
-            }
-            .desktop-simulator-bar {
-                display: none !important;
             }
         }
 
@@ -152,16 +140,33 @@
 
         /* Screen Shake Animation */
         @keyframes screenShake {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(-6px, 4px); }
-            40% { transform: translate(6px, -4px); }
-            60% { transform: translate(-4px, -3px); }
-            80% { transform: translate(4px, 3px); }
-            100% { transform: translate(0, 0); }
+            0% {
+                transform: translate(0, 0);
+            }
+
+            20% {
+                transform: translate(-6px, 4px);
+            }
+
+            40% {
+                transform: translate(6px, -4px);
+            }
+
+            60% {
+                transform: translate(-4px, -3px);
+            }
+
+            80% {
+                transform: translate(4px, 3px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
         }
 
         .screen-shake {
-            animation: screenShake 0.32s cubic-bezier(.36,.07,.19,.97) both;
+            animation: screenShake 0.32s cubic-bezier(.36, .07, .19, .97) both;
         }
 
         /* Red Vignette Damage Flash */
@@ -169,7 +174,7 @@
             pointer-events: none;
             transition: opacity 0.22s ease-out;
             opacity: 0;
-            box-shadow: inset 0 0 90px rgba(239, 68, 68, 0.7);
+            box-shadow: inset 0 0 90px rgba(239, 68, 68, 0.75);
         }
 
         #damageVignette.flash {
@@ -178,9 +183,20 @@
 
         /* Countdown Pop Zoom */
         @keyframes popZoom {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .pop-zoom {
@@ -194,401 +210,374 @@
     </style>
 </head>
 
-<body class="bg-[#07070a] text-white min-h-screen w-full overflow-hidden flex flex-col items-center justify-center select-none font-sans m-0 p-0">
+<body
+    class="bg-[#07070a] text-white min-h-screen w-full overflow-hidden flex flex-col items-center justify-center select-none font-sans m-0 p-0">
 
-    <!-- 🛠️ Desktop Dev & Mobile Testing Hub Bar (Visible on desktop screen >= 768px) -->
-    <header id="desktopDevBar" class="desktop-simulator-bar hidden md:flex fixed top-0 inset-x-0 h-12 bg-neutral-900/90 border-b border-white/10 backdrop-blur-xl z-50 items-center justify-between px-5 text-xs">
-        <div class="flex items-center gap-3">
-            <span class="font-bold text-white flex items-center gap-1.5 text-xs">
-                <span>📱</span> FacePlay Mobile Hub
-            </span>
-            <span class="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-semibold flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Mobile Responsive Ready
-            </span>
-        </div>
-
-        <!-- Simulator Device Size Presets -->
-        <div class="flex items-center gap-1 bg-black/60 p-1 rounded-xl border border-white/10 shadow-inner">
-            <button id="btn-mode-standard" onclick="setDeviceMode('standard')"
-                class="device-btn px-2.5 py-1 rounded-lg font-medium transition-all bg-white/20 text-white border border-white/30 text-[11px] cursor-pointer">
-                📱 iPhone (390×844)
-            </button>
-            <button id="btn-mode-compact" onclick="setDeviceMode('compact')"
-                class="device-btn px-2.5 py-1 rounded-lg font-medium transition-all text-neutral-400 hover:text-white text-[11px] cursor-pointer">
-                📱 Android (360×780)
-            </button>
-            <button id="btn-mode-promax" onclick="setDeviceMode('promax')"
-                class="device-btn px-2.5 py-1 rounded-lg font-medium transition-all text-neutral-400 hover:text-white text-[11px] cursor-pointer">
-                📱 Pro Max (430×932)
-            </button>
-            <button id="btn-mode-fullscreen" onclick="setDeviceMode('fullscreen')"
-                class="device-btn px-2.5 py-1 rounded-lg font-medium transition-all text-neutral-400 hover:text-white text-[11px] cursor-pointer">
-                🖥️ เต็มจอ (Full)
-            </button>
-        </div>
-
-        <!-- Desktop Controls Reference -->
-        <div class="flex items-center gap-2.5 text-neutral-400 text-[11px]">
-            <span>🖱️/📱 <b class="text-neutral-200">แตะหรือคลิก</b></span>
-            <span>⌨️ <b class="text-neutral-200">Space/↑</b> = กระโดด</span>
-            <span>⌨️ <b class="text-neutral-200">← →</b> = หลบ</span>
-            <span>⌨️ <b class="text-neutral-200">Esc</b> = เมนู</span>
-        </div>
-    </header>
-
-    <!-- 📱 Device Chassis / Wrapper (Adapts seamlessly between Mobile and Desktop) -->
-    <div id="deviceWrapper" class="w-full h-full flex items-center justify-center md:pt-12 p-0 md:p-3 overflow-hidden">
-        <div id="deviceFrame" class="device-chassis relative transition-all duration-300 w-full h-[100dvh] md:w-[390px] md:h-[844px] md:max-h-[calc(100vh-68px)] bg-black overflow-hidden flex flex-col shadow-2xl">
-
-            <!-- Mobile Dynamic Island / Speaker Notch (Desktop simulator visual) -->
-            <div class="notch-pill hidden absolute top-2 inset-x-0 z-50 pointer-events-none justify-center">
-                <div class="w-28 h-6 bg-black rounded-full border border-white/10 flex items-center justify-between px-3 shadow-md">
-                    <span class="w-2 h-2 rounded-full bg-neutral-900 border border-neutral-700"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-neutral-950 border border-neutral-800"></span>
-                </div>
-            </div>
+    <!-- 📱 Device Chassis / Wrapper (Adapts seamlessly & automatically to user's device) -->
+    <div id="deviceWrapper"
+        class="w-full h-full min-h-[100dvh] flex items-center justify-center p-0 md:p-3 overflow-hidden">
+        <div id="deviceFrame"
+            class="device-chassis relative transition-all duration-300 w-full h-[100dvh] md:w-[430px] md:h-[92vh] md:max-h-[890px] md:min-h-[620px] bg-black overflow-hidden flex flex-col shadow-2xl">
 
             <!-- Main App Container -->
             <div id="appContainer"
                 class="relative w-full h-full bg-black overflow-hidden flex flex-col justify-between">
 
-        <video id="webcam" class="hidden" autoplay playsinline></video>
-        <canvas id="gameCanvas" class="absolute inset-0 w-full h-full block z-0 cursor-pointer"></canvas>
+                <video id="webcam" class="hidden" autoplay playsinline></video>
+                <canvas id="gameCanvas" class="absolute inset-0 w-full h-full block z-0"></canvas>
 
-        <!-- Red Damage Vignette FX (Pointer events none) -->
-        <div id="damageVignette" class="absolute inset-0 z-20 pointer-events-none"></div>
+                <!-- Red Damage Vignette FX (Pointer events none) -->
+                <div id="damageVignette" class="absolute inset-0 z-20 pointer-events-none"></div>
 
-        <!-- 3, 2, 1, GO! Countdown Overlay -->
-        <div id="countdownOverlay"
-            class="hidden absolute inset-0 z-50 bg-black/75 backdrop-blur-md flex-col items-center justify-center pointer-events-none">
-            <div id="countdownText" class="text-8xl font-black text-white tracking-tighter drop-shadow-2xl pop-zoom">3</div>
-            <p id="countdownSub" class="text-xs text-neutral-400 font-semibold mt-4 tracking-widest uppercase">จัดใบหน้าให้อยู่ตรงกลางกล้อง</p>
-        </div>
-
-        <!-- Top In-Game UI (z-40 with explicit pointer-events-auto buttons) -->
-        <div id="gameUI"
-            class="hidden absolute top-5 inset-x-4 flex justify-between items-start z-40 pointer-events-none">
-            <div class="flex flex-col gap-2 pointer-events-auto">
-                <div class="flex items-center gap-2">
-                    <button id="backBtn" onclick="backToMenu(event)"
-                        class="w-10 h-10 bg-neutral-900/90 hover:bg-neutral-800 p-2 rounded-full backdrop-blur-md border border-white/20 active:scale-90 transition-all cursor-pointer shadow-lg flex items-center justify-center"
-                        title="กลับหน้าเมนู">
-                        <svg class="w-5 h-5 text-neutral-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                    </button>
-                    <button id="gameSoundBtn" onclick="toggleSound(event)"
-                        class="w-10 h-10 bg-neutral-900/90 hover:bg-neutral-800 p-2 rounded-full backdrop-blur-md border border-white/20 active:scale-90 transition-all cursor-pointer shadow-lg flex items-center justify-center text-sm leading-none"
-                        title="เปิด/ปิดเสียง">
-                        <span id="gameSoundIcon">🔊</span>
-                    </button>
-                </div>
-                <div
-                    class="bg-neutral-950/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md flex items-center gap-2 shadow-md">
-                    <span class="text-[10px] text-neutral-400 font-semibold tracking-wider">SCORE</span>
-                    <span id="scoreText" class="font-bold text-lg text-white font-mono">0</span>
-                </div>
-                <!-- Dynamic Combo Badge -->
-                <div id="comboBadge"
-                    class="hidden bg-amber-500/20 border border-amber-400/40 px-3 py-1 rounded-full text-xs font-bold text-amber-300 backdrop-blur-md items-center gap-1.5 combo-glow animate-pulse">
-                    <span>🔥</span>
-                    <span id="comboText">2x COMBO</span>
-                </div>
-            </div>
-            <div class="flex flex-col items-end gap-1.5 pointer-events-auto">
-                <div id="livesText" class="text-xl tracking-widest text-right filter drop-shadow">❤️❤️❤️</div>
-                <div
-                    class="bg-neutral-950/80 px-3 py-1 rounded-full text-xs text-neutral-300 border border-white/10 backdrop-blur-md flex items-center gap-1.5 shadow-md">
-                    <span class="text-neutral-500 text-[10px] font-semibold">USER</span>
-                    <span id="player-tag" class="font-medium text-white truncate max-w-[110px]"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- In-Game Interactive Action Bar (Bottom Click / Tap Control) -->
-        <div id="gameBottomControls" class="hidden absolute bottom-6 inset-x-4 flex flex-col items-center justify-center pointer-events-auto z-40">
-            <button id="inGameActionBtn" onclick="triggerPlayerAction(event)"
-                class="w-full max-w-xs bg-neutral-900/90 hover:bg-neutral-800 active:scale-95 text-white font-bold py-3.5 px-6 rounded-2xl backdrop-blur-md border border-white/20 shadow-2xl flex items-center justify-center gap-2.5 transition-all cursor-pointer">
-                <span id="inGameActionEmoji" class="text-2xl">🦘</span>
-                <span id="inGameActionText" class="text-xs font-semibold tracking-wide">แตะจอ หรือกด SPACEBAR เพื่อกระโดด</span>
-            </button>
-        </div>
-
-        <!-- Menu Panel -->
-        <div id="menuPanel"
-            class="absolute inset-0 flex flex-col justify-end z-30 bg-gradient-to-t from-black via-black/90 to-transparent transition-all duration-500">
-            <div class="p-6 text-center mb-1">
-                <div class="flex justify-between items-center mb-3">
-                    <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-                        FacePlay
-                    </h1>
-                    <div class="flex items-center gap-1.5">
-                        <button id="soundToggleBtn" onclick="toggleSound(event)"
-                            class="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 px-2.5 py-1.5 rounded-xl text-xs font-medium active:scale-95 transition-all cursor-pointer shadow-sm"
-                            title="เปิด/ปิดเสียง">
-                            <span id="soundIcon">🔊</span>
-                        </button>
-                        <button onclick="openLeaderboardModal()"
-                            class="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 px-3 py-1.5 rounded-xl text-xs font-medium active:scale-95 transition-all cursor-pointer shadow-sm">
-                            🏆 อันดับ
-                        </button>
-                        <button onclick="openSettingsModal()"
-                            class="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 px-3 py-1.5 rounded-xl text-xs font-medium active:scale-95 transition-all cursor-pointer shadow-sm">
-                            ⚙️ จัดการ
-                        </button>
-                    </div>
-                </div>
-                <p class="text-neutral-400 text-xs">ยินดีต้อนรับ <span id="menu-player-tag" class="text-white font-medium"></span></p>
-            </div>
-
-            <div class="px-5 pb-2 flex justify-between items-center text-[11px] text-neutral-500 font-medium">
-                <span>เลือกโหมดเกม (5 โหมด)</span>
-                <span class="text-[10px] text-neutral-400">ดับเบิลคลิกเพื่อเริ่มเล่นทันที ⚡</span>
-            </div>
-            <div class="flex items-center gap-2.5 px-5 pb-5 overflow-x-auto hide-scrollbar snap-x">
-                <button onclick="selectGame('sushi', this)" ondblclick="startGame()"
-                    class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
-                    <span class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">ARCADE</span>
-                    <span class="text-3xl emoji-icon">🍣</span>
-                    <div class="text-center px-1"><span class="block text-xs font-semibold text-white">กินซูชิ</span><span
-                            class="block text-[10px] text-neutral-400 mt-0.5">อ้าปากงับ</span></div>
-                </button>
-                <button onclick="selectGame('dodge', this)" ondblclick="startGame()"
-                    class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
-                    <span class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">AGILITY</span>
-                    <span class="text-3xl emoji-icon">📁</span>
-                    <div class="text-center px-1"><span class="block text-xs font-semibold text-white">หลบงาน</span><span
-                            class="block text-[10px] text-neutral-400 mt-0.5">โยกหัวหลบ</span></div>
-                </button>
-                <button onclick="selectGame('smile', this)" ondblclick="startGame()"
-                    class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
-                    <span class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">CASUAL</span>
-                    <span class="text-3xl emoji-icon">💰</span>
-                    <div class="text-center px-1"><span
-                            class="block text-xs font-semibold text-white">ยิ้มรับทรัพย์</span><span
-                            class="block text-[10px] text-neutral-400 mt-0.5">ยิ้มชนเหรียญ</span></div>
-                </button>
-                <button onclick="selectGame('pose', this)" ondblclick="startGame()"
-                    class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
-                    <span class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">POSE</span>
-                    <span class="text-3xl emoji-icon">🎭</span>
-                    <div class="text-center px-1"><span
-                            class="block text-xs font-semibold text-white">ทำท่าโจทย์</span><span
-                            class="block text-[10px] text-neutral-400 mt-0.5">เลียนแบบท่า</span></div>
-                </button>
-                <button onclick="selectGame('jump', this)" ondblclick="startGame()"
-                    class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
-                    <span class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">RUNNER</span>
-                    <span class="text-3xl emoji-icon">🦘</span>
-                    <div class="text-center px-1"><span
-                            class="block text-xs font-semibold text-white">กระโดดหลบ</span><span
-                            class="block text-[10px] text-neutral-400 mt-0.5">กระโดดข้ามรั้ว</span></div>
-                </button>
-            </div>
-
-            <div class="px-6 pb-8 flex flex-col gap-2">
-                <button id="startBtn" onclick="startGame()"
-                    class="w-full btn-primary-3d font-semibold py-3.5 rounded-xl text-sm transition-all shadow-md cursor-pointer">เริ่มเล่นเกม</button>
-                <button onclick="handleLogout()"
-                    class="text-neutral-500 hover:text-neutral-300 font-medium py-1.5 text-xs transition-all cursor-pointer text-center">ออกจากระบบ</button>
-            </div>
-        </div>
-
-        <!-- ⚙️ Modal ตั้งค่า & User Management Panel -->
-        <div id="settingsModal"
-            class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
-            <div
-                class="bg-neutral-950 border border-neutral-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto text-neutral-200">
-                <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
-                    <h3 class="font-semibold text-sm text-white">จัดการระบบผู้ใช้งาน</h3>
-                    <button onclick="closeSettingsModal()"
-                        class="text-neutral-400 hover:text-white font-medium text-lg leading-none cursor-pointer">&times;</button>
+                <!-- 3, 2, 1, GO! Countdown Overlay -->
+                <div id="countdownOverlay"
+                    class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex-col items-center justify-center pointer-events-none text-center px-6">
+                    <div id="countdownText"
+                        class="text-8xl font-black text-white tracking-tighter drop-shadow-2xl pop-zoom">3</div>
+                    <p id="countdownSub" class="text-xs text-neutral-300 font-semibold mt-4 tracking-wider uppercase">
+                        ส่องใบหน้าให้อยู่ในกรอบกล้อง</p>
                 </div>
 
-                <!-- 1. ข้อมูลตัวเอง (/me) -->
-                <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl text-xs space-y-1">
-                    <p class="font-medium text-neutral-300">ข้อมูลของคุณ (GET /me)</p>
-                    <p class="text-neutral-400">ID: <span id="profile-id" class="text-white font-mono">-</span></p>
-                    <p class="text-neutral-400">Username: <span id="profile-username" class="text-white font-semibold">-</span></p>
-                </div>
-
-                <!-- 2. เปลี่ยนรหัสผ่าน (/change-password) -->
-                <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
-                    <p class="text-xs font-medium text-neutral-300">เปลี่ยนรหัสผ่าน</p>
-                    <input type="password" id="old-pass" placeholder="รหัสผ่านเดิม"
-                        class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
-                    <input type="password" id="new-pass" placeholder="รหัสผ่านใหม่"
-                        class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
-                    <button onclick="submitChangePassword()"
-                        class="w-full bg-white hover:bg-neutral-200 text-black py-2 rounded-lg font-medium text-xs cursor-pointer transition-all">อัปเดตรหัสผ่าน</button>
-                </div>
-
-                <!-- 3. ค้นหา User ตาม ID (/users/{id}) -->
-                <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
-                    <p class="text-xs font-medium text-neutral-300">ค้นหาผู้ใช้ด้วย ID (GET /users/{id})</p>
-                    <div class="flex gap-2">
-                        <input type="number" id="search-id" placeholder="ระบุ ID"
-                            class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
-                        <button onclick="searchUserById()"
-                            class="bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 px-3.5 py-2 rounded-lg font-medium text-xs text-neutral-200 cursor-pointer transition-all">ค้นหา</button>
-                    </div>
-                    <p id="search-result" class="text-[11px] text-neutral-400 h-4"></p>
-                </div>
-
-                <!-- 4. ดึงรายชื่อ User ทั้งหมด (/users) -->
-                <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
-                    <div class="flex justify-between items-center">
-                        <p class="text-xs font-medium text-neutral-300">รายชื่อสมาชิกทั้งหมด (GET /users)</p>
-                        <button onclick="loadAllUsers()"
-                            class="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 px-2 py-1 rounded text-[10px] cursor-pointer transition-all">โหลดรายชื่อ</button>
-                    </div>
-                    <div id="users-list"
-                        class="max-h-24 overflow-y-auto text-[11px] text-neutral-400 space-y-1 bg-neutral-900/80 p-2.5 rounded-lg border border-neutral-800/60">
-                        <p>กดปุ่ม "โหลดรายชื่อ" เพื่อแสดงข้อมูล</p>
-                    </div>
-                </div>
-
-                <!-- 5 & 6. แก้ไข และ ลบ User (PUT /users/{id}, DELETE /users/{id}) -->
-                <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
-                    <p class="text-xs font-medium text-neutral-300">จัดการข้อมูล User (PUT / DELETE)</p>
-                    <input type="number" id="target-id" placeholder="ID ที่ต้องการแก้ไข/ลบ"
-                        class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
-                    <input type="text" id="target-username" placeholder="Username ใหม่"
-                        class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
-                    <input type="password" id="target-password" placeholder="Password ใหม่"
-                        class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
-                    <div class="flex gap-2 pt-1">
-                        <button onclick="updateUserById()"
-                            class="flex-1 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 py-2 rounded-lg font-medium text-xs text-neutral-200 cursor-pointer transition-all">แก้ไขข้อมูล</button>
-                        <button onclick="deleteUserById()"
-                            class="flex-1 bg-red-950/60 hover:bg-red-900/80 border border-red-900/80 text-red-200 py-2 rounded-lg font-medium text-xs cursor-pointer transition-all">ลบผู้ใช้</button>
-                    </div>
-                </div>
-
-                <p id="settings-msg" class="text-center text-xs h-4"></p>
-                <button onclick="handleLogout()"
-                    class="w-full text-neutral-500 hover:text-red-400 font-medium py-1.5 text-xs transition-all cursor-pointer">ออกจากระบบ (Logout)</button>
-            </div>
-        </div>
-
-        <!-- 🏆 Modal ตารางอันดับคะแนน (Leaderboard Panel) -->
-        <div id="leaderboardModal"
-            class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
-            <div
-                class="bg-neutral-950 border border-neutral-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col gap-3.5 max-h-[92vh] overflow-y-auto">
-                <div class="flex justify-between items-center border-b border-neutral-800 pb-2.5">
-                    <h3 class="font-semibold text-sm text-white flex items-center gap-1.5">
-                        <span>🏆</span> อันดับคะแนน (Leaderboard)
-                    </h3>
-                    <button onclick="closeLeaderboardModal()"
-                        class="text-neutral-400 hover:text-white font-medium text-lg leading-none cursor-pointer">&times;</button>
-                </div>
-
-                <!-- Tabs เลือกโหมดเกม (Minimal segmented control) -->
-                <div class="bg-neutral-900/80 p-1 rounded-xl border border-neutral-800/80 flex gap-1 overflow-x-auto hide-scrollbar text-xs">
-                    <button onclick="switchLeaderboardTab('all', this)" class="lb-tab px-3 py-1.5 rounded-lg font-medium bg-neutral-800 text-white shrink-0 active:scale-95 transition-all">ทั้งหมด</button>
-                    <button onclick="switchLeaderboardTab('sushi', this)" class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">ซูชิ</button>
-                    <button onclick="switchLeaderboardTab('dodge', this)" class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">หลบงาน</button>
-                    <button onclick="switchLeaderboardTab('smile', this)" class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">ยิ้ม</button>
-                    <button onclick="switchLeaderboardTab('pose', this)" class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">ทำท่า</button>
-                    <button onclick="switchLeaderboardTab('jump', this)" class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">กระโดด</button>
-                </div>
-
-                <!-- Personal Best Card -->
-                <div id="lb-my-best" class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl flex items-center justify-between">
-                    <div>
-                        <p class="text-[11px] text-neutral-400">สถิติสูงสุดของคุณ (<span id="lb-my-username" class="text-neutral-200 font-medium">-</span>)</p>
-                        <p class="text-base font-bold text-white mt-0.5"><span id="lb-my-score">0</span> แต้ม</p>
-                    </div>
-                    <span id="lb-my-rank-badge" class="bg-neutral-800 text-neutral-300 text-[11px] font-medium px-2.5 py-1 rounded-lg border border-neutral-700/60">รอโหลด...</span>
-                </div>
-
-                <!-- Leaderboard List -->
-                <div id="leaderboard-content" class="flex flex-col gap-1.5 max-h-[280px] overflow-y-auto pr-0.5">
-                    <div class="text-center text-neutral-500 text-xs py-8">กำลังดึงข้อมูลอันดับ...</div>
-                </div>
-
-                <button onclick="closeLeaderboardModal()"
-                    class="w-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 font-medium py-2.5 rounded-xl text-xs transition-all cursor-pointer">ปิด</button>
-            </div>
-        </div>
-
-        <!-- Game Over UI -->
-        <div id="gameOverUI"
-            class="hidden absolute inset-0 z-50 bg-black/90 backdrop-blur-xl flex-col items-center justify-center p-6 text-center">
-            
-            <div class="w-full max-w-xs bg-gradient-to-b from-neutral-900/90 to-neutral-950/95 border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col items-center gap-4">
-                <div>
-                    <span id="newHighScoreBadge" class="hidden inline-block bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full mb-1 tracking-wider animate-bounce">🌟 NEW RECORD!</span>
-                    <h2 class="text-xs font-semibold text-neutral-400 tracking-widest uppercase">ผลการเล่น</h2>
-                    <h1 class="text-2xl font-black text-white tracking-tight mt-0.5">GAME OVER</h1>
-                </div>
-                
-                <div class="bg-black/60 border border-white/5 w-full rounded-2xl p-4 flex flex-col items-center">
-                    <span id="gameOverMsg" class="text-xs text-neutral-400 font-medium mb-1">คะแนนรวม</span>
-                    <p class="text-5xl font-black text-white tracking-tight font-mono" id="finalScore">0</p>
-                    
-                    <div class="mt-3 pt-3 border-t border-white/10 w-full flex justify-around text-xs">
-                        <div>
-                            <span class="text-neutral-500 text-[10px] block">MAX COMBO</span>
-                            <span id="finalMaxCombo" class="font-bold text-amber-300 font-mono">0x</span>
+                <!-- Top In-Game UI -->
+                <div id="gameUI"
+                    class="hidden absolute top-5 inset-x-4 flex justify-between items-start z-40 pointer-events-none">
+                    <div class="flex flex-col gap-2 pointer-events-auto">
+                        <div class="flex items-center gap-2">
+                            <button id="backBtn" onclick="backToMenu(event)"
+                                class="w-10 h-10 bg-neutral-900/90 hover:bg-neutral-800 p-2 rounded-full backdrop-blur-md border border-white/20 active:scale-90 transition-all cursor-pointer shadow-lg flex items-center justify-center"
+                                title="กลับหน้าเมนู">
+                                <svg class="w-5 h-5 text-neutral-200" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                            </button>
+                            <button id="gameSoundBtn" onclick="toggleSound(event)"
+                                class="w-10 h-10 bg-neutral-900/90 hover:bg-neutral-800 p-2 rounded-full backdrop-blur-md border border-white/20 active:scale-90 transition-all cursor-pointer shadow-lg flex items-center justify-center text-sm leading-none"
+                                title="เปิด/ปิดเสียง">
+                                <span id="gameSoundIcon">🔊</span>
+                            </button>
                         </div>
-                        <div>
-                            <span class="text-neutral-500 text-[10px] block">GAME MODE</span>
-                            <span id="finalGameMode" class="font-semibold text-neutral-300">-</span>
+                        <div
+                            class="bg-neutral-950/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md flex items-center gap-2 shadow-md">
+                            <span class="text-[10px] text-neutral-400 font-semibold tracking-wider">SCORE</span>
+                            <span id="scoreText" class="font-bold text-lg text-white font-mono">0</span>
+                        </div>
+                        <!-- Dynamic Combo Badge -->
+                        <div id="comboBadge"
+                            class="hidden bg-amber-500/20 border border-amber-400/40 px-3 py-1 rounded-full text-xs font-bold text-amber-300 backdrop-blur-md items-center gap-1.5 combo-glow animate-pulse">
+                            <span>🔥</span>
+                            <span id="comboText">2x COMBO</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1.5 pointer-events-auto">
+                        <div id="livesText" class="text-xl tracking-widest text-right filter drop-shadow">❤️❤️❤️</div>
+                        <div
+                            class="bg-neutral-950/80 px-3 py-1 rounded-full text-xs text-neutral-300 border border-white/10 backdrop-blur-md flex items-center gap-1.5 shadow-md">
+                            <span class="text-neutral-500 text-[10px] font-semibold">USER</span>
+                            <span id="player-tag" class="font-medium text-white truncate max-w-[110px]"></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="w-full flex flex-col gap-2 pt-1">
-                    <button onclick="restartGame()"
-                        class="w-full btn-primary-3d font-semibold py-3 rounded-xl text-sm cursor-pointer shadow-sm">เล่นอีกครั้ง</button>
-                    <button onclick="openLeaderboardModal(game.id)"
-                        class="w-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 text-neutral-200 font-medium py-2.5 rounded-xl text-xs transition-all cursor-pointer">
-                        🏆 ดูตารางคะแนน
-                    </button>
-                    <button onclick="backToMenu()"
-                        class="w-full text-neutral-500 hover:text-neutral-300 font-medium py-1.5 text-xs transition-all cursor-pointer">กลับหน้าเมนู</button>
+                <!-- Menu Panel -->
+                <div id="menuPanel"
+                    class="absolute inset-0 flex flex-col justify-end z-30 bg-gradient-to-t from-black via-black/90 to-transparent transition-all duration-500">
+                    <div class="p-6 text-center mb-1">
+                        <div class="flex justify-between items-center mb-3">
+                            <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                                FacePlay 🎮
+                            </h1>
+                            <div class="flex items-center gap-1.5">
+                                <button id="soundToggleBtn" onclick="toggleSound(event)"
+                                    class="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 px-2.5 py-1.5 rounded-xl text-xs font-medium active:scale-95 transition-all cursor-pointer shadow-sm"
+                                    title="เปิด/ปิดเสียง">
+                                    <span id="soundIcon">🔊</span>
+                                </button>
+                                <button onclick="openLeaderboardModal()"
+                                    class="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 px-3 py-1.5 rounded-xl text-xs font-medium active:scale-95 transition-all cursor-pointer shadow-sm">
+                                    🏆 อันดับ
+                                </button>
+                                <button onclick="openSettingsModal()"
+                                    class="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-300 border border-neutral-800 px-3 py-1.5 rounded-xl text-xs font-medium active:scale-95 transition-all cursor-pointer shadow-sm">
+                                    ⚙️ จัดการ
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-neutral-400 text-xs">ยินดีต้อนรับ <span id="menu-player-tag"
+                                class="text-white font-medium"></span></p>
+                    </div>
+
+                    <div class="px-5 pb-2 flex justify-between items-center text-[11px] text-neutral-500 font-medium">
+                        <span>เลือกโหมดเกม (ควบคุมด้วยใบหน้า 100%)</span>
+                        <span class="text-[10px] text-amber-400/90">AI Face Tracking 👁️</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 px-5 pb-5 overflow-x-auto hide-scrollbar snap-x" style="touch-action: pan-x; -webkit-overflow-scrolling: touch;">
+                        <button onclick="selectGame('sushi', this)"
+                            class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
+                            <span
+                                class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">MOUTH</span>
+                            <span class="text-3xl emoji-icon">🍣</span>
+                            <div class="text-center px-1"><span
+                                    class="block text-xs font-semibold text-white">กินซูชิ</span><span
+                                    class="block text-[10px] text-neutral-400 mt-0.5">อ้าปากงับ</span></div>
+                        </button>
+                        <button onclick="selectGame('dodge', this)"
+                            class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
+                            <span
+                                class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">HEAD</span>
+                            <span class="text-3xl emoji-icon">📁</span>
+                            <div class="text-center px-1"><span
+                                    class="block text-xs font-semibold text-white">หลบงาน</span><span
+                                    class="block text-[10px] text-neutral-400 mt-0.5">โยกหัวหลบ</span></div>
+                        </button>
+                        <button onclick="selectGame('smile', this)"
+                            class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
+                            <span
+                                class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">SMILE</span>
+                            <span class="text-3xl emoji-icon">💰</span>
+                            <div class="text-center px-1"><span
+                                    class="block text-xs font-semibold text-white">ยิ้มรับทรัพย์</span><span
+                                    class="block text-[10px] text-neutral-400 mt-0.5">ยิ้มชนเหรียญ</span></div>
+                        </button>
+                        <button onclick="selectGame('pose', this)"
+                            class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
+                            <span
+                                class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">POSE</span>
+                            <span class="text-3xl emoji-icon">🎭</span>
+                            <div class="text-center px-1"><span
+                                    class="block text-xs font-semibold text-white">ทำท่าโจทย์</span><span
+                                    class="block text-[10px] text-neutral-400 mt-0.5">ทำท่าทางตามโจทย์</span></div>
+                        </button>
+                        <button onclick="selectGame('jump', this)"
+                            class="game-card flex-shrink-0 w-24 h-36 flex flex-col items-center justify-between py-3 cursor-pointer snap-center">
+                            <span
+                                class="card-badge text-[9px] font-bold px-2 py-0.5 rounded-full bg-neutral-800/80 text-neutral-400 tracking-wider">JUMP</span>
+                            <span class="text-3xl emoji-icon">🦘</span>
+                            <div class="text-center px-1"><span
+                                    class="block text-xs font-semibold text-white">กระโดดหลบ</span><span
+                                    class="block text-[10px] text-neutral-400 mt-0.5">กระโดดตัวจริง</span></div>
+                        </button>
+                    </div>
+
+                    <div class="px-6 pb-8 flex flex-col gap-2">
+                        <button id="startBtn" onclick="startGame()"
+                            class="w-full btn-primary-3d font-semibold py-3.5 rounded-xl text-sm transition-all shadow-md cursor-pointer">เริ่มเล่นเกม</button>
+                        <button onclick="handleLogout()"
+                            class="text-neutral-500 hover:text-neutral-300 font-medium py-1.5 text-xs transition-all cursor-pointer text-center">ออกจากระบบ</button>
+                    </div>
                 </div>
+
+                <!-- ⚙️ Modal ตั้งค่า & User Management Panel -->
+                <div id="settingsModal"
+                    class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
+                    <div
+                        class="bg-neutral-950 border border-neutral-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto text-neutral-200">
+                        <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
+                            <h3 class="font-semibold text-sm text-white">จัดการระบบผู้ใช้งาน</h3>
+                            <button onclick="closeSettingsModal()"
+                                class="text-neutral-400 hover:text-white font-medium text-lg leading-none cursor-pointer">&times;</button>
+                        </div>
+
+                        <!-- 1. ข้อมูลตัวเอง (/me) -->
+                        <div class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl text-xs space-y-1">
+                            <p class="font-medium text-neutral-300">ข้อมูลของคุณ (GET /me)</p>
+                            <p class="text-neutral-400">ID: <span id="profile-id" class="text-white font-mono">-</span>
+                            </p>
+                            <p class="text-neutral-400">Username: <span id="profile-username"
+                                    class="text-white font-semibold">-</span></p>
+                        </div>
+
+                        <!-- 2. เปลี่ยนรหัสผ่าน (/change-password) -->
+                        <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
+                            <p class="text-xs font-medium text-neutral-300">เปลี่ยนรหัสผ่าน</p>
+                            <input type="password" id="old-pass" placeholder="รหัสผ่านเดิม"
+                                class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                            <input type="password" id="new-pass" placeholder="รหัสผ่านใหม่"
+                                class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                            <button onclick="submitChangePassword()"
+                                class="w-full bg-white hover:bg-neutral-200 text-black py-2 rounded-lg font-medium text-xs cursor-pointer transition-all">อัปเดตรหัสผ่าน</button>
+                        </div>
+
+                        <!-- 3. ค้นหา User ตาม ID (/users/{id}) -->
+                        <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
+                            <p class="text-xs font-medium text-neutral-300">ค้นหาผู้ใช้ด้วย ID (GET /users/{id})</p>
+                            <div class="flex gap-2">
+                                <input type="number" id="search-id" placeholder="ระบุ ID"
+                                    class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                                <button onclick="searchUserById()"
+                                    class="bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 px-3.5 py-2 rounded-lg font-medium text-xs text-neutral-200 cursor-pointer transition-all">ค้นหา</button>
+                            </div>
+                            <p id="search-result" class="text-[11px] text-neutral-400 h-4"></p>
+                        </div>
+
+                        <!-- 4. ดึงรายชื่อ User ทั้งหมด (/users) -->
+                        <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
+                            <div class="flex justify-between items-center">
+                                <p class="text-xs font-medium text-neutral-300">รายชื่อสมาชิกทั้งหมด (GET /users)</p>
+                                <button onclick="loadAllUsers()"
+                                    class="bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 px-2 py-1 rounded text-[10px] cursor-pointer transition-all">โหลดรายชื่อ</button>
+                            </div>
+                            <div id="users-list"
+                                class="max-h-24 overflow-y-auto text-[11px] text-neutral-400 space-y-1 bg-neutral-900/80 p-2.5 rounded-lg border border-neutral-800/60">
+                                <p>กดปุ่ม "โหลดรายชื่อ" เพื่อแสดงข้อมูล</p>
+                            </div>
+                        </div>
+
+                        <!-- 5 & 6. แก้ไข และ ลบ User (PUT /users/{id}, DELETE /users/{id}) -->
+                        <div class="space-y-2 bg-neutral-900/40 p-3 rounded-xl border border-neutral-800/80">
+                            <p class="text-xs font-medium text-neutral-300">จัดการข้อมูล User (PUT / DELETE)</p>
+                            <input type="number" id="target-id" placeholder="ID ที่ต้องการแก้ไข/ลบ"
+                                class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                            <input type="text" id="target-username" placeholder="Username ใหม่"
+                                class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                            <input type="password" id="target-password" placeholder="Password ใหม่"
+                                class="w-full bg-neutral-900 border border-neutral-800 px-3 py-2 rounded-lg text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600">
+                            <div class="flex gap-2 pt-1">
+                                <button onclick="updateUserById()"
+                                    class="flex-1 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 py-2 rounded-lg font-medium text-xs text-neutral-200 cursor-pointer transition-all">แก้ไขข้อมูล</button>
+                                <button onclick="deleteUserById()"
+                                    class="flex-1 bg-red-950/60 hover:bg-red-900/80 border border-red-900/80 text-red-200 py-2 rounded-lg font-medium text-xs cursor-pointer transition-all">ลบผู้ใช้</button>
+                            </div>
+                        </div>
+
+                        <p id="settings-msg" class="text-center text-xs h-4"></p>
+                        <button onclick="handleLogout()"
+                            class="w-full text-neutral-500 hover:text-red-400 font-medium py-1.5 text-xs transition-all cursor-pointer">ออกจากระบบ
+                            (Logout)</button>
+                    </div>
+                </div>
+
+                <!-- 🏆 Modal ตารางอันดับคะแนน (Leaderboard Panel) -->
+                <div id="leaderboardModal"
+                    class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
+                    <div
+                        class="bg-neutral-950 border border-neutral-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col gap-3.5 max-h-[92vh] overflow-y-auto">
+                        <div class="flex justify-between items-center border-b border-neutral-800 pb-2.5">
+                            <h3 class="font-semibold text-sm text-white flex items-center gap-1.5">
+                                <span>🏆</span> อันดับคะแนน (Leaderboard)
+                            </h3>
+                            <button onclick="closeLeaderboardModal()"
+                                class="text-neutral-400 hover:text-white font-medium text-lg leading-none cursor-pointer">&times;</button>
+                        </div>
+
+                        <!-- Tabs เลือกโหมดเกม -->
+                        <div
+                            class="bg-neutral-900/80 p-1 rounded-xl border border-neutral-800/80 flex gap-1 overflow-x-auto hide-scrollbar text-xs" style="touch-action: pan-x; -webkit-overflow-scrolling: touch;">
+                            <button onclick="switchLeaderboardTab('all', this)"
+                                class="lb-tab px-3 py-1.5 rounded-lg font-medium bg-neutral-800 text-white shrink-0 active:scale-95 transition-all">ทั้งหมด</button>
+                            <button onclick="switchLeaderboardTab('sushi', this)"
+                                class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">ซูชิ</button>
+                            <button onclick="switchLeaderboardTab('dodge', this)"
+                                class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">หลบงาน</button>
+                            <button onclick="switchLeaderboardTab('smile', this)"
+                                class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">ยิ้ม</button>
+                            <button onclick="switchLeaderboardTab('pose', this)"
+                                class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">ทำท่า</button>
+                            <button onclick="switchLeaderboardTab('jump', this)"
+                                class="lb-tab px-3 py-1.5 rounded-lg font-medium text-neutral-400 hover:text-white shrink-0 active:scale-95 transition-all">กระโดด</button>
+                        </div>
+
+                        <!-- Personal Best Card -->
+                        <div id="lb-my-best"
+                            class="bg-neutral-900/60 border border-neutral-800/80 p-3 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-[11px] text-neutral-400">สถิติสูงสุดของคุณ (<span id="lb-my-username"
+                                        class="text-neutral-200 font-medium">-</span>)</p>
+                                <p class="text-base font-bold text-white mt-0.5"><span id="lb-my-score">0</span> แต้ม
+                                </p>
+                            </div>
+                            <span id="lb-my-rank-badge"
+                                class="bg-neutral-800 text-neutral-300 text-[11px] font-medium px-2.5 py-1 rounded-lg border border-neutral-700/60">รอโหลด...</span>
+                        </div>
+
+                        <!-- Leaderboard List -->
+                        <div id="leaderboard-content"
+                            class="flex flex-col gap-1.5 max-h-[280px] overflow-y-auto pr-0.5">
+                            <div class="text-center text-neutral-500 text-xs py-8">กำลังดึงข้อมูลอันดับ...</div>
+                        </div>
+
+                        <button onclick="closeLeaderboardModal()"
+                            class="w-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 font-medium py-2.5 rounded-xl text-xs transition-all cursor-pointer">ปิด</button>
+                    </div>
+                </div>
+
+                <!-- Game Over UI -->
+                <div id="gameOverUI"
+                    class="hidden absolute inset-0 z-50 bg-black/90 backdrop-blur-xl flex-col items-center justify-center p-6 text-center">
+
+                    <div
+                        class="w-full max-w-xs bg-gradient-to-b from-neutral-900/90 to-neutral-950/95 border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col items-center gap-4">
+                        <div>
+                            <span id="newHighScoreBadge"
+                                class="hidden inline-block bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full mb-1 tracking-wider animate-bounce">🌟
+                                NEW RECORD!</span>
+                            <h2 class="text-xs font-semibold text-neutral-400 tracking-widest uppercase">ผลการเล่น</h2>
+                            <h1 class="text-2xl font-black text-white tracking-tight mt-0.5">GAME OVER</h1>
+                        </div>
+
+                        <div
+                            class="bg-black/60 border border-white/5 w-full rounded-2xl p-4 flex flex-col items-center">
+                            <span id="gameOverMsg" class="text-xs text-neutral-400 font-medium mb-1">คะแนนรวม</span>
+                            <p class="text-5xl font-black text-white tracking-tight font-mono" id="finalScore">0</p>
+
+                            <div class="mt-3 pt-3 border-t border-white/10 w-full flex justify-around text-xs">
+                                <div>
+                                    <span class="text-neutral-500 text-[10px] block">MAX COMBO</span>
+                                    <span id="finalMaxCombo" class="font-bold text-amber-300 font-mono">0x</span>
+                                </div>
+                                <div>
+                                    <span class="text-neutral-500 text-[10px] block">GAME MODE</span>
+                                    <span id="finalGameMode" class="font-semibold text-neutral-300">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full flex flex-col gap-2 pt-1">
+                            <button onclick="restartGame()"
+                                class="w-full btn-primary-3d font-semibold py-3 rounded-xl text-sm cursor-pointer shadow-sm">เล่นอีกครั้ง</button>
+                            <button onclick="openLeaderboardModal(game.id)"
+                                class="w-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700/80 text-neutral-200 font-medium py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                                🏆 ดูตารางคะแนน
+                            </button>
+                            <button onclick="backToMenu()"
+                                class="w-full text-neutral-500 hover:text-neutral-300 font-medium py-1.5 text-xs transition-all cursor-pointer">กลับหน้าเมนู</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading AI -->
+                <div id="loadingUI"
+                    class="hidden absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+                    <div class="animate-spin rounded-full h-10 w-10 border-2 border-neutral-700 border-t-white mb-4">
+                    </div>
+                    <p class="text-neutral-300 text-xs font-medium tracking-wide">กำลังเปิดกล้องและเชื่อมต่อระบบ AI Face
+                        Mesh...</p>
+                </div>
+
             </div>
         </div>
-
-        <!-- Loading AI -->
-        <div id="loadingUI"
-            class="hidden absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-            <div class="animate-spin rounded-full h-10 w-10 border-2 border-neutral-700 border-t-white mb-4"></div>
-            <p class="text-neutral-300 text-xs font-medium tracking-wide">กำลังเปิดกล้องและเชื่อมต่อระบบ AI...</p>
-        </div>
     </div>
 
-    <!-- Home Bar Indicator (Desktop simulator visual) -->
-    <div class="home-bar hidden absolute bottom-1.5 inset-x-0 z-50 pointer-events-none justify-center">
-        <div class="w-28 h-1 bg-white/25 rounded-full mx-auto"></div>
-    </div>
-</div>
-</div>
-
-    <!-- JavaScript Core & API Management Functions -->
     <script>
         const API_URL = (!window.location.hostname || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
             ? "http://localhost:8000"
             : `${window.location.protocol === 'https:' ? 'https:' : 'http:'}//${window.location.hostname}:8000`;
-        const loggedUser = localStorage.getItem("faceplay_user");
+        let loggedUser = localStorage.getItem("faceplay_user");
 
         if (!loggedUser) {
-            window.location.href = "index.html";
-        } else {
-            document.getElementById("player-tag").innerText = loggedUser;
-            document.getElementById("menu-player-tag").innerText = loggedUser;
+            loggedUser = "Player_Guest";
+            localStorage.setItem("faceplay_user", loggedUser);
         }
+        document.getElementById("player-tag").innerText = loggedUser;
+        document.getElementById("menu-player-tag").innerText = loggedUser;
 
         // --- User Management API Functions ---
         async function openSettingsModal() {
             document.getElementById("settingsModal").classList.remove("hidden");
             document.getElementById("settingsModal").classList.add("flex");
             try {
-                const res = await fetch(`${API_URL}/me?username=${loggedUser}`);
+                const res = await fetch(`${API_URL}/me?username=${encodeURIComponent(loggedUser)}`);
                 const data = await res.json();
                 if (res.ok) {
                     document.getElementById("profile-id").innerText = data.id;
@@ -618,7 +607,7 @@
                 });
                 const data = await res.json();
                 msg.style.color = res.ok ? "#34d399" : "#f87171";
-                msg.innerText = res.ok ? "เปลี่ยนรหัสผ่านสำเร็จ!" : data.detail;
+                msg.innerText = res.ok ? "เปลี่ยนรหัสผ่านสำเร็จ!" : (data.detail || "เกิดข้อผิดพลาด");
                 if (res.ok) { document.getElementById("old-pass").value = ""; document.getElementById("new-pass").value = ""; }
             } catch (e) { msg.style.color = "#f87171"; msg.innerText = "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้"; }
         }
@@ -628,7 +617,7 @@
             const resBox = document.getElementById("search-result");
             if (!id) return;
             try {
-                const res = await fetch(`${API_URL}/users/${id}`);
+                const res = await fetch(`${API_URL}/users/${encodeURIComponent(id)}`);
                 const data = await res.json();
                 if (res.ok) {
                     resBox.style.color = "#34d399";
@@ -645,7 +634,7 @@
             try {
                 const res = await fetch(`${API_URL}/users?limit=10&offset=0`);
                 const data = await res.json();
-                if (res.ok && data.users.length > 0) {
+                if (res.ok && data.users && data.users.length > 0) {
                     listBox.innerHTML = data.users.map(u => `<div>ID: ${u.id} | <b>${u.username}</b></div>`).join('');
                 } else {
                     listBox.innerHTML = "ไม่พบสมาชิกในระบบ";
@@ -662,14 +651,14 @@
             if (!id || !username || !password) { msg.style.color = "#f87171"; msg.innerText = "กรอกข้อมูลช่องแก้ไขให้ครบ"; return; }
 
             try {
-                const res = await fetch(`${API_URL}/users/${id}`, {
+                const res = await fetch(`${API_URL}/users/${encodeURIComponent(id)}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password })
                 });
                 const data = await res.json();
                 msg.style.color = res.ok ? "#34d399" : "#f87171";
-                msg.innerText = res.ok ? data.message : data.detail;
+                msg.innerText = res.ok ? data.message : (data.detail || "แก้ไขไม่สำเร็จ");
             } catch (e) { msg.style.color = "#f87171"; msg.innerText = "แก้ไขไม่สำเร็จ"; }
         }
 
@@ -681,10 +670,10 @@
             if (!confirm(`ยืนยันการลบ User ID ${id} ใช่หรือไม่?`)) return;
 
             try {
-                const res = await fetch(`${API_URL}/users/${id}`, { method: "DELETE" });
+                const res = await fetch(`${API_URL}/users/${encodeURIComponent(id)}`, { method: "DELETE" });
                 const data = await res.json();
                 msg.style.color = res.ok ? "#34d399" : "#f87171";
-                msg.innerText = res.ok ? data.message : data.detail;
+                msg.innerText = res.ok ? data.message : (data.detail || "ลบไม่สำเร็จ");
                 loadAllUsers();
             } catch (e) { msg.style.color = "#f87171"; msg.innerText = "ลบไม่สำเร็จ"; }
         }
@@ -697,11 +686,11 @@
 
         // --- Leaderboard System Functions ---
         const GAME_NAMES = {
-            'sushi': '🍣 กินซูชิ',
-            'dodge': '📁 หลบงาน',
-            'smile': '💰 ยิ้มรับทรัพย์',
-            'pose': '🎭 ทำท่าโจทย์',
-            'jump': '🦘 กระโดดข้ามรั้ว',
+            'sushi': '🍣 กินซูชิ (อ้าปาก)',
+            'dodge': '📁 หลบงาน (โยกหัว)',
+            'smile': '💰 ยิ้มรับทรัพย์ (ยิ้ม)',
+            'pose': '🎭 ทำท่าโจทย์ (เลียนแบบ)',
+            'jump': '🦘 กระโดดข้ามรั้ว (กระโดดจริง)',
             'all': '🌟 รวมทุกเกม'
         };
 
@@ -754,7 +743,7 @@
             container.innerHTML = '<div class="text-center text-neutral-500 text-xs py-8">กำลังดึงข้อมูลอันดับ...</div>';
 
             try {
-                const url = gameId === 'all' ? `${API_URL}/leaderboard?limit=15` : `${API_URL}/leaderboard?game_id=${gameId}&limit=15`;
+                const url = gameId === 'all' ? `${API_URL}/leaderboard?limit=15` : `${API_URL}/leaderboard?game_id=${encodeURIComponent(gameId)}&limit=15`;
                 const res = await fetch(url);
                 const data = await res.json();
                 const list = data.leaderboard || [];
@@ -816,6 +805,7 @@
                 container.innerHTML = '<div class="text-center text-neutral-400 text-xs py-8">ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ตารางคะแนนได้</div>';
             }
         }
+
         // --- Web Audio API Synthesizer (Zero External Assets) ---
         class SoundManager {
             constructor() {
@@ -969,7 +959,8 @@
 
         const soundManager = new SoundManager();
 
-        function toggleSound() {
+        function toggleSound(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
             soundManager.toggleMute();
         }
 
@@ -978,21 +969,26 @@
         const video = document.getElementById('webcam');
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        let isAILoaded = false, camera, faceMesh, playerFace = null, latestFrame = null;
+        let isAILoaded = false, camera = null, faceMesh = null, playerFace = null, latestFrame = null;
+        let countdownTimer = null;
 
         function updateCanvasDimensions() {
-            if (container) { canvas.width = container.clientWidth || 400; canvas.height = container.clientHeight || 700; }
+            if (container) {
+                canvas.width = container.clientWidth || 400;
+                canvas.height = container.clientHeight || 700;
+            }
         }
         updateCanvasDimensions();
         window.addEventListener('resize', updateCanvasDimensions);
+        window.addEventListener('orientationchange', () => setTimeout(updateCanvasDimensions, 200));
 
         const POSE_LIST = [
-            { id: 'open_mouth', label: 'อ้าปากร้องว้าว!', emoji: '😮', hint: 'อ้าปากให้กว้าง' },
-            { id: 'smile', label: 'ยิ้มหวานเห็นฟัน!', emoji: '😁', hint: 'ฉีกยิ้มกว้างๆ' },
-            { id: 'tilt_left', label: 'เอียงหัวไปทางซ้าย!', emoji: '👈', hint: 'เอียงคอไปทางซ้าย' },
-            { id: 'tilt_right', label: 'เอียงหัวไปทางขวา!', emoji: '👉', hint: 'เอียงคอไปทางขวา' },
-            { id: 'wink', label: 'ขยิบตาข้างเดียว!', emoji: '😉', hint: 'ปิดตาข้างเดียว' },
-            { id: 'look_up', label: 'เงยหน้ามองฟ้า!', emoji: '👆', hint: 'เงยคางขึ้นข้างบน' }
+            { id: 'open_mouth', label: 'อ้าปากร้องว้าว!', emoji: '😮', hint: 'อ้าปากกว้างๆ ให้กล้องเห็น' },
+            { id: 'smile', label: 'ยิ้มหวานเห็นฟัน!', emoji: '😁', hint: 'ฉีกยิ้มกว้างๆ ให้สดใส' },
+            { id: 'tilt_left', label: 'เอียงหัวไปทางซ้าย!', emoji: '👈', hint: 'เอียงคอไปทางซ้ายของคุณ' },
+            { id: 'tilt_right', label: 'เอียงหัวไปทางขวา!', emoji: '👉', hint: 'เอียงคอไปทางขวาของคุณ' },
+            { id: 'kiss', label: 'ทำปากจู๋!', emoji: '😗', hint: 'ทำปากจู๋ ส่งจุ๊บให้กล้อง' },
+            { id: 'look_up', label: 'เงยหน้ามองฟ้า!', emoji: '👆', hint: 'เงยคางขึ้นมองด้านบน' }
         ];
 
         let game = {
@@ -1007,12 +1003,6 @@
             particles: [],
             frameCount: 0,
 
-            // Dual Control & Input Timers
-            manualJumpTimer: 0,
-            manualMouthTimer: 0,
-            manualSmileTimer: 0,
-            dodgeOffsetX: 0,
-
             // Pose Matcher state
             currentPose: null,
             poseTimer: 0,
@@ -1021,12 +1011,11 @@
             poseFeedbackTimer: 0,
             poseFeedbackColor: '#34d399',
 
-            // Jump Challenge state
+            // Jump Challenge state (100% Physical Body Jump Detection)
             jumpBaselineY: null,
-            jumpBaselineFrames: 0,
             isJumping: false,
             jumpHeight: 0,
-            jumpThreshold: 40,
+            jumpThreshold: 35,
             jumpFeedback: '',
             jumpFeedbackTimer: 0,
             jumpFeedbackColor: '#34d399'
@@ -1061,11 +1050,11 @@
         }
 
         function triggerDamageEffect() {
-            const container = document.getElementById('appContainer');
-            if (container) {
-                container.classList.remove('screen-shake');
-                void container.offsetWidth;
-                container.classList.add('screen-shake');
+            const cont = document.getElementById('appContainer');
+            if (cont) {
+                cont.classList.remove('screen-shake');
+                void cont.offsetWidth;
+                cont.classList.add('screen-shake');
             }
             const vig = document.getElementById('damageVignette');
             if (vig) {
@@ -1074,9 +1063,9 @@
             }
         }
 
-        function selectGame(id, btnElement) {
+        function selectGame(id, btnElement, playSound = true) {
             game.id = id;
-            soundManager.playClick();
+            if (playSound) soundManager.playClick();
             document.querySelectorAll('.game-card').forEach(card => card.classList.remove('active-selected'));
             if (btnElement) btnElement.classList.add('active-selected');
             const startBtn = document.getElementById('startBtn');
@@ -1085,111 +1074,6 @@
                 startBtn.innerText = `เริ่มเล่น: ${GAME_NAMES[id] || id}`;
                 startBtn.className = "w-full btn-primary-3d font-semibold py-3.5 rounded-xl text-sm cursor-pointer shadow-md";
             }
-            updateInGameActionButton();
-        }
-
-        function updateInGameActionButton() {
-            const bottomControls = document.getElementById('gameBottomControls');
-            const actionEmoji = document.getElementById('inGameActionEmoji');
-            const actionText = document.getElementById('inGameActionText');
-            if (!bottomControls || !actionEmoji || !actionText) return;
-
-            if (game.id === 'jump') {
-                actionEmoji.innerText = '🦘';
-                actionText.innerText = 'แตะจอ หรือกด SPACEBAR เพื่อกระโดด';
-            } else if (game.id === 'sushi') {
-                actionEmoji.innerText = '🍣';
-                actionText.innerText = 'แตะจอ หรือกด SPACEBAR เพื่องับซูชิ';
-            } else if (game.id === 'dodge') {
-                actionEmoji.innerText = '📁';
-                actionText.innerText = 'กดลูกศร ◀ ▶ หรือแตะซ้าย/ขวาเพื่อหลบ';
-            } else if (game.id === 'smile') {
-                actionEmoji.innerText = '💰';
-                actionText.innerText = 'ยิ้มให้กล้อง หรือแตะจอ / SPACE เพื่อเก็บ';
-            } else if (game.id === 'pose') {
-                actionEmoji.innerText = '🎭';
-                actionText.innerText = 'ทำท่า หรือแตะจอ / SPACE เพื่อผ่าน';
-            }
-        }
-
-        function triggerPlayerAction(e) {
-            if (!game.isRunning) return;
-            if (e && e.target) {
-                if (e.target.closest('#backBtn') || e.target.closest('#gameSoundBtn')) return;
-            }
-            if (game.id === 'jump') {
-                triggerJump();
-            } else if (game.id === 'sushi') {
-                triggerBite();
-            } else if (game.id === 'smile') {
-                triggerSmile();
-            } else if (game.id === 'dodge') {
-                let rect = canvas.getBoundingClientRect();
-                let clickX = rect.width / 2;
-                if (e) {
-                    if (e.clientX !== undefined) clickX = e.clientX - rect.left;
-                    else if (e.touches && e.touches[0]) clickX = e.touches[0].clientX - rect.left;
-                }
-                if (clickX < rect.width / 2) triggerDodgeLeft();
-                else triggerDodgeRight();
-            } else if (game.id === 'pose') {
-                triggerPosePass();
-            }
-        }
-
-        function triggerJump() {
-            if (!game.isRunning || game.id !== 'jump') return;
-            game.manualJumpTimer = 22;
-            soundManager.playScore(false);
-            const posX = playerFace ? getFacePointCoordinates(playerFace[1]).x : canvas.width / 2;
-            addFloatingText('JUMP! 🦘', posX, canvas.height - 180, '#38bdf8');
-            spawnParticles(posX, canvas.height - 150, 6, '#38bdf8');
-        }
-
-        function triggerBite() {
-            if (!game.isRunning || game.id !== 'sushi') return;
-            game.manualMouthTimer = 20;
-            const posX = playerFace ? getFacePointCoordinates(playerFace[13]).x : canvas.width / 2;
-            const posY = playerFace ? getFacePointCoordinates(playerFace[13]).y : canvas.height * 0.65;
-            addFloatingText('CHOMP! 🍣', posX, posY - 30, '#fbbf24');
-            soundManager.playScore(false);
-        }
-
-        function triggerSmile() {
-            if (!game.isRunning || game.id !== 'smile') return;
-            game.manualSmileTimer = 22;
-            const posX = playerFace ? getFacePointCoordinates(playerFace[1]).x : canvas.width / 2;
-            const posY = playerFace ? getFacePointCoordinates(playerFace[1]).y : canvas.height * 0.6;
-            addFloatingText('SMILE! 😊', posX, posY - 30, '#f472b6');
-            soundManager.playScore(false);
-        }
-
-        function triggerDodgeLeft() {
-            if (!game.isRunning || game.id !== 'dodge') return;
-            game.dodgeOffsetX = Math.max(-130, game.dodgeOffsetX - 50);
-            soundManager.playScore(false);
-        }
-
-        function triggerDodgeRight() {
-            if (!game.isRunning || game.id !== 'dodge') return;
-            game.dodgeOffsetX = Math.min(130, game.dodgeOffsetX + 50);
-            soundManager.playScore(false);
-        }
-
-        function triggerPosePass() {
-            if (!game.isRunning || game.id !== 'pose' || !game.currentPose) return;
-            game.score += 25;
-            game.combo++;
-            if (game.combo > game.maxCombo) game.maxCombo = game.combo;
-            game.poseFeedback = '✨ ตรงเป๊ะ! +25';
-            game.poseFeedbackColor = '#34d399';
-            game.poseFeedbackTimer = 28;
-            addFloatingText('+25 PASS!', canvas.width / 2, 200, '#34d399');
-            spawnParticles(canvas.width / 2, 190, 10, '#34d399');
-            soundManager.playScore(true);
-            if (game.combo >= 2) soundManager.playCombo(game.combo);
-            updateUI();
-            pickNextPose();
         }
 
         function pickNextPose() {
@@ -1212,15 +1096,15 @@
 
             switch (poseId) {
                 case 'open_mouth':
-                    return mouthHeight > 0.046;
+                    return mouthHeight > 0.044;
                 case 'smile':
-                    return (mouthWidth / faceWidth) > 0.46;
+                    return (mouthWidth / faceWidth) > 0.45;
                 case 'tilt_left':
-                    return eyeSlope > 0.04;
+                    return eyeSlope > 0.038;
                 case 'tilt_right':
-                    return eyeSlope < -0.04;
-                case 'wink':
-                    return (leftEyeHeight < 0.013 && rightEyeHeight > 0.02) || (rightEyeHeight < 0.013 && leftEyeHeight > 0.02);
+                    return eyeSlope < -0.038;
+                case 'kiss':
+                    return (mouthWidth / faceWidth) < 0.29;
                 case 'look_up':
                     return noseRatio < 0.52;
                 default:
@@ -1239,12 +1123,6 @@
             }, 400);
 
             document.getElementById('gameUI').classList.remove('hidden');
-            const bottomControls = document.getElementById('gameBottomControls');
-            if (bottomControls) {
-                bottomControls.classList.remove('hidden');
-                bottomControls.classList.add('flex');
-            }
-            updateInGameActionButton();
             resetGameStats();
 
             if (!isAILoaded) {
@@ -1257,6 +1135,10 @@
         }
 
         function runCountdownAndStart() {
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+            }
             game.isRunning = false;
             const overlay = document.getElementById('countdownOverlay');
             const text = document.getElementById('countdownText');
@@ -1267,10 +1149,21 @@
             let count = 3;
             text.innerText = count;
             text.className = 'text-8xl font-black text-white tracking-tighter drop-shadow-2xl pop-zoom';
-            sub.innerText = 'จัดใบหน้าให้อยู่ตรงกลางกล้อง (หรือคลิก/กด SPACE เพื่อเล่น)';
+
+            if (game.id === 'jump') {
+                sub.innerText = 'ส่องใบหน้าให้อยู่ในกล้อง แล้วกระโดดตัวจริงเพื่อเล่น!';
+            } else if (game.id === 'sushi') {
+                sub.innerText = 'ส่องใบหน้าให้ตรงกล้อง แล้วอ้าปากเพื่องับซูชิ!';
+            } else if (game.id === 'dodge') {
+                sub.innerText = 'ส่องใบหน้าให้ตรงกล้อง แล้วโยกศีรษะเพื่อหลบ!';
+            } else if (game.id === 'smile') {
+                sub.innerText = 'ส่องใบหน้าให้ตรงกล้อง แล้วฉีกยิ้มหวานเพื่อรับเหรียญ!';
+            } else if (game.id === 'pose') {
+                sub.innerText = 'ส่องใบหน้าให้ตรงกล้อง แล้วทำท่าทางตามโจทย์!';
+            }
             soundManager.playCountdown(count);
 
-            const timer = setInterval(() => {
+            countdownTimer = setInterval(() => {
                 count--;
                 if (count > 0) {
                     text.innerText = count;
@@ -1286,7 +1179,8 @@
                     sub.innerText = 'ลุยเลย!';
                     soundManager.playCountdown('GO');
                 } else {
-                    clearInterval(timer);
+                    clearInterval(countdownTimer);
+                    countdownTimer = null;
                     overlay.classList.remove('flex');
                     overlay.classList.add('hidden');
                     game.isRunning = true;
@@ -1299,16 +1193,25 @@
                 e.preventDefault();
                 e.stopPropagation();
             }
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+            }
+            const overlay = document.getElementById('countdownOverlay');
+            if (overlay) {
+                overlay.classList.remove('flex');
+                overlay.classList.add('hidden');
+            }
             soundManager.playClick();
             game.isRunning = false;
+            game.items = [];
+            game.particles = [];
+            game.floatingTexts = [];
+
             document.getElementById('gameOverUI').classList.add('hidden');
             document.getElementById('gameOverUI').classList.remove('flex');
             document.getElementById('gameUI').classList.add('hidden');
-            const bottomControls = document.getElementById('gameBottomControls');
-            if (bottomControls) {
-                bottomControls.classList.add('hidden');
-                bottomControls.classList.remove('flex');
-            }
+
             const menu = document.getElementById('menuPanel');
             menu.classList.remove('hidden');
             void menu.offsetWidth;
@@ -1317,16 +1220,14 @@
         }
 
         function restartGame() {
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+                countdownTimer = null;
+            }
             soundManager.playClick();
             document.getElementById('gameOverUI').classList.add('hidden');
             document.getElementById('gameOverUI').classList.remove('flex');
             document.getElementById('gameUI').classList.remove('hidden');
-            const bottomControls = document.getElementById('gameBottomControls');
-            if (bottomControls) {
-                bottomControls.classList.remove('hidden');
-                bottomControls.classList.add('flex');
-            }
-            updateInGameActionButton();
             resetGameStats();
             runCountdownAndStart();
         }
@@ -1341,12 +1242,6 @@
             game.particles = [];
             game.frameCount = 0;
 
-            // Reset Input Timers
-            game.manualJumpTimer = 0;
-            game.manualMouthTimer = 0;
-            game.manualSmileTimer = 0;
-            game.dodgeOffsetX = 0;
-
             // Reset Pose
             game.poseFeedback = '';
             game.poseFeedbackTimer = 0;
@@ -1354,9 +1249,8 @@
                 pickNextPose();
             }
 
-            // Reset Jump
+            // Reset Jump state
             game.jumpBaselineY = null;
-            game.jumpBaselineFrames = 0;
             game.isJumping = false;
             game.jumpHeight = 0;
             game.jumpFeedback = '';
@@ -1368,8 +1262,9 @@
         function updateUI() {
             document.getElementById('scoreText').innerText = game.score;
             let hearts = "";
-            for (let i = 0; i < game.lives; i++) hearts += "❤️";
-            for (let i = game.lives; i < 3; i++) hearts += "🖤";
+            const clampedLives = Math.max(0, Math.min(3, game.lives));
+            for (let i = 0; i < clampedLives; i++) hearts += "❤️";
+            for (let i = clampedLives; i < 3; i++) hearts += "🖤";
             document.getElementById('livesText').innerText = hearts;
 
             // Update combo badge
@@ -1386,9 +1281,22 @@
                 }
             }
 
-            if (game.lives <= 0) {
+            if (game.lives <= 0 && game.isRunning) {
                 game.isRunning = false;
                 soundManager.playGameOver();
+
+                // High Score Check
+                const prevHighScore = parseInt(localStorage.getItem(`faceplay_hs_${game.id}`) || '0', 10);
+                const isNewRecord = game.score > prevHighScore && game.score > 0;
+                if (isNewRecord) {
+                    localStorage.setItem(`faceplay_hs_${game.id}`, game.score);
+                    const badge = document.getElementById('newHighScoreBadge');
+                    if (badge) badge.classList.remove('hidden');
+                } else {
+                    const badge = document.getElementById('newHighScoreBadge');
+                    if (badge) badge.classList.add('hidden');
+                }
+
                 document.getElementById('finalScore').innerText = game.score;
                 document.getElementById('finalMaxCombo').innerText = `${game.maxCombo}x`;
                 document.getElementById('finalGameMode').innerText = GAME_NAMES[game.id] || game.id;
@@ -1410,55 +1318,146 @@
             return { x: offsetX + (1 - point.x) * renderW, y: offsetY + point.y * renderH, scale };
         }
 
+        // --- Core Game Logic (100% Face & Physical Jump Controls) ---
         function processGameLogic() {
             if (!game.isRunning) return;
             game.frameCount++;
             const cw = canvas.width, ch = canvas.height;
 
-            let noseX = 0, noseY = 0, mouthX = 0, mouthY = 0, isMouthOpen = false, isSmiling = false;
-            if (playerFace) {
-                const nose = getFacePointCoordinates(playerFace[1]);
-                noseX = nose.x; noseY = nose.y;
-                const mouth = getFacePointCoordinates(playerFace[13]);
-                mouthX = mouth.x; mouthY = mouth.y;
-                isMouthOpen = (playerFace[14].y - playerFace[13].y) > 0.04;
-                const faceWidth = Math.abs(playerFace[234].x - playerFace[454].x);
-                isSmiling = (Math.abs(playerFace[291].x - playerFace[61].x) / faceWidth) > 0.45;
+            // 1. Game: Sushi Eater (Mouth Open Only)
+            if (game.id === 'sushi') {
+                if (Math.random() < 0.022) {
+                    game.items.push({ x: Math.random() * (cw - 80) + 40, y: -50, speed: 4 + Math.random() * 2.8, emoji: '🍣' });
+                }
+
+                const isMouthOpen = playerFace ? ((playerFace[14].y - playerFace[13].y) > 0.042) : false;
+                const mouth = playerFace ? getFacePointCoordinates(playerFace[13]) : { x: cw / 2, y: ch * 0.65 };
+
+                for (let i = game.items.length - 1; i >= 0; i--) {
+                    let item = game.items[i];
+                    item.y += item.speed;
+
+                    // Eat sushi with open mouth
+                    if (playerFace && isMouthOpen && Math.hypot(mouth.x - item.x, (mouth.y + 10) - item.y) < 50) {
+                        game.score += 10;
+                        game.combo++;
+                        if (game.combo > game.maxCombo) game.maxCombo = game.combo;
+                        addFloatingText('+10 YUM! 🍣', mouth.x, mouth.y - 25, '#fbbf24');
+                        spawnParticles(mouth.x, mouth.y, 7, '#fbbf24');
+                        soundManager.playScore(game.combo >= 3);
+                        if (game.combo >= 3) soundManager.playCombo(game.combo);
+                        updateUI();
+                        game.items.splice(i, 1);
+                        continue;
+                    }
+
+                    // Sushi dropped off screen
+                    if (item.y > ch) {
+                        game.lives--;
+                        game.combo = 0;
+                        triggerDamageEffect();
+                        soundManager.playHit();
+                        updateUI();
+                        game.items.splice(i, 1);
+                        if (!game.isRunning) break;
+                        continue;
+                    }
+                }
             }
 
-            // Dual Control: Manual overrides (Mouse Click / Touch / Spacebar)
-            if (game.manualMouthTimer > 0) {
-                game.manualMouthTimer--;
-                isMouthOpen = true;
-                if (!mouthX) { mouthX = cw / 2; mouthY = ch * 0.65; }
-            }
-            if (game.manualSmileTimer > 0) {
-                game.manualSmileTimer--;
-                isSmiling = true;
-                if (!noseX) { noseX = cw / 2; noseY = ch * 0.6; }
+            // 2. Game: Work Dodge (Head Lean/Tilt Only)
+            else if (game.id === 'dodge') {
+                if (Math.random() < 0.045) {
+                    const emojis = ['📁', '📧', '📉'];
+                    game.items.push({ x: Math.random() * (cw - 80) + 40, y: -50, speed: 4.8 + Math.random() * 3.5, emoji: emojis[Math.floor(Math.random() * 3)] });
+                }
+
+                const nose = playerFace ? getFacePointCoordinates(playerFace[1]) : { x: cw / 2, y: ch * 0.65 };
+                const noseX = nose.x;
+                const noseY = nose.y;
+
+                for (let i = game.items.length - 1; i >= 0; i--) {
+                    let item = game.items[i];
+                    item.y += item.speed;
+
+                    // Collision with player's head/nose
+                    if (playerFace && Math.hypot(noseX - item.x, noseY - item.y) < 48) {
+                        game.lives--;
+                        game.combo = 0;
+                        triggerDamageEffect();
+                        soundManager.playHit();
+                        updateUI();
+                        game.items.splice(i, 1);
+                        if (!game.isRunning) break;
+                        continue;
+                    }
+
+                    // Safely dodged work document
+                    if (item.y > ch) {
+                        game.score += 10;
+                        game.combo++;
+                        if (game.combo > game.maxCombo) game.maxCombo = game.combo;
+                        if (game.combo % 3 === 0) {
+                            addFloatingText(`${game.combo}x COMBO! 🔥`, cw / 2, 140, '#38bdf8');
+                            soundManager.playCombo(game.combo);
+                        } else {
+                            soundManager.playScore();
+                        }
+                        updateUI();
+                        game.items.splice(i, 1);
+                        continue;
+                    }
+                }
             }
 
-            // Smooth Dodge Decay & Position Offset
-            if (game.dodgeOffsetX > 0) game.dodgeOffsetX = Math.max(0, game.dodgeOffsetX - 2);
-            else if (game.dodgeOffsetX < 0) game.dodgeOffsetX = Math.min(0, game.dodgeOffsetX + 2);
+            // 3. Game: Smile Collector (Smile Only)
+            else if (game.id === 'smile') {
+                if (game.frameCount % 55 === 0) {
+                    game.items.push({ x: Math.random() * (cw - 80) + 40, y: -50, speed: 4.5, emoji: '💰' });
+                }
 
-            if (game.id === 'dodge') {
-                noseX = (playerFace ? noseX : cw / 2) + game.dodgeOffsetX;
-                if (!noseY) noseY = ch * 0.65;
+                const faceWidth = playerFace ? (Math.abs(playerFace[234].x - playerFace[454].x) || 0.1) : 0.1;
+                const isSmiling = playerFace ? ((Math.abs(playerFace[291].x - playerFace[61].x) / faceWidth) > 0.44) : false;
+                const nose = playerFace ? getFacePointCoordinates(playerFace[1]) : { x: cw / 2, y: ch * 0.6 };
+                const noseX = nose.x;
+                const noseY = nose.y;
+
+                for (let i = game.items.length - 1; i >= 0; i--) {
+                    let item = game.items[i];
+                    item.y += item.speed;
+
+                    // Coin collision with face
+                    if (playerFace && Math.hypot(noseX - item.x, noseY - item.y) < 52) {
+                        if (isSmiling) {
+                            game.score += 20;
+                            game.combo++;
+                            if (game.combo > game.maxCombo) game.maxCombo = game.combo;
+                            addFloatingText('+20 SMILE! 😊', item.x, item.y, '#f472b6');
+                            spawnParticles(item.x, item.y, 8, '#f472b6');
+                            soundManager.playScore(true);
+                            if (game.combo >= 2) soundManager.playCombo(game.combo);
+                        } else {
+                            game.lives--;
+                            game.combo = 0;
+                            triggerDamageEffect();
+                            soundManager.playHit();
+                        }
+                        updateUI();
+                        game.items.splice(i, 1);
+                        if (!game.isRunning) break;
+                        continue;
+                    }
+
+                    // Coin dropped off screen
+                    if (item.y > ch) {
+                        game.items.splice(i, 1);
+                        continue;
+                    }
+                }
             }
 
-            // Falling Items Spawn
-            if (game.id === 'sushi' && Math.random() < 0.02) {
-                game.items.push({ x: Math.random() * (cw - 80) + 40, y: -50, speed: 4 + Math.random() * 3, emoji: '🍣' });
-            } else if (game.id === 'dodge' && Math.random() < 0.05) {
-                const emojis = ['📁', '📧', '📉'];
-                game.items.push({ x: Math.random() * (cw - 80) + 40, y: -50, speed: 5 + Math.random() * 4, emoji: emojis[Math.floor(Math.random() * 3)] });
-            } else if (game.id === 'smile' && game.frameCount % 60 === 0) {
-                game.items.push({ x: Math.random() * (cw - 80) + 40, y: -50, speed: 4.5, emoji: '💰' });
-            }
-
-            // 4. Game: Pose Matcher
-            if (game.id === 'pose') {
+            // 4. Game: Pose Matcher (Facial Gestures Only)
+            else if (game.id === 'pose') {
                 if (game.poseFeedbackTimer > 0) game.poseFeedbackTimer--;
                 if (!game.currentPose) pickNextPose();
 
@@ -1466,10 +1465,10 @@
                     game.score += 25;
                     game.combo++;
                     if (game.combo > game.maxCombo) game.maxCombo = game.combo;
-                    game.poseFeedback = '✨ ตรงเป๊ะ! +25';
+                    game.poseFeedback = '✨ ท่าทางเป๊ะมาก! +25';
                     game.poseFeedbackColor = '#34d399';
                     game.poseFeedbackTimer = 28;
-                    addFloatingText('+25 PERFECT!', cw / 2, 200, '#34d399');
+                    addFloatingText('+25 PERFECT! 🎭', cw / 2, 200, '#34d399');
                     spawnParticles(cw / 2, 190, 10, '#34d399');
                     soundManager.playScore(true);
                     if (game.combo >= 2) soundManager.playCombo(game.combo);
@@ -1491,39 +1490,52 @@
                 }
             }
 
-            // 5. Game: Jump Challenge
-            if (game.id === 'jump') {
+            // 5. Game: Jump Challenge (100% Physical Body/Head Jump Only)
+            else if (game.id === 'jump') {
                 if (game.jumpFeedbackTimer > 0) game.jumpFeedbackTimer--;
                 const groundY = ch - 115;
-                game.jumpThreshold = Math.max(35, ch * 0.06);
+                game.jumpThreshold = Math.max(30, ch * 0.055);
 
-                let isFaceJumping = false;
+                let noseX = cw / 2;
+                let noseY = ch * 0.4;
+
                 if (playerFace) {
+                    const nose = getFacePointCoordinates(playerFace[1]);
+                    noseX = nose.x;
+                    noseY = nose.y;
+
+                    // Baseline smooth tracking
                     if (game.jumpBaselineY === null) {
                         game.jumpBaselineY = noseY;
-                        game.jumpBaselineFrames = 1;
-                    } else if (game.jumpBaselineFrames < 30) {
-                        game.jumpBaselineY = (game.jumpBaselineY * game.jumpBaselineFrames + noseY) / (game.jumpBaselineFrames + 1);
-                        game.jumpBaselineFrames++;
                     } else {
-                        if (noseY >= game.jumpBaselineY - 15) {
-                            game.jumpBaselineY = game.jumpBaselineY * 0.98 + noseY * 0.02;
+                        // Slowly adapt baseline only when player is not jumping
+                        if (!game.isJumping) {
+                            game.jumpBaselineY = game.jumpBaselineY * 0.95 + noseY * 0.05;
                         }
                     }
 
+                    // Physical vertical jump displacement
                     game.jumpHeight = Math.max(0, game.jumpBaselineY - noseY);
-                    isFaceJumping = game.jumpHeight > game.jumpThreshold;
-                }
+                    const isCurrentlyJumping = game.jumpHeight >= game.jumpThreshold;
 
-                let isManualJumping = false;
-                if (game.manualJumpTimer > 0) {
-                    game.manualJumpTimer--;
-                    isManualJumping = true;
+                    if (isCurrentlyJumping) {
+                        if (!game.isJumping) {
+                            // Jump just triggered!
+                            soundManager.playScore(false);
+                            addFloatingText('🦘 JUMP!', noseX, noseY - 45, '#38bdf8');
+                            spawnParticles(noseX, noseY - 20, 8, '#38bdf8');
+                        }
+                        game.isJumping = true;
+                    } else {
+                        game.isJumping = false;
+                    }
+                } else {
+                    game.isJumping = false;
+                    game.jumpHeight = 0;
                 }
-                game.isJumping = isFaceJumping || isManualJumping;
 
                 // Spawn ground obstacles
-                const obstacleInterval = Math.max(70, 120 - Math.floor(game.score / 25) * 8);
+                const obstacleInterval = Math.max(75, 125 - Math.floor(game.score / 25) * 8);
                 if (game.frameCount % obstacleInterval === 0) {
                     const groundObstacles = ['🚧', '🌵', '🪨', '⚡', '🦀'];
                     const obsEmoji = groundObstacles[Math.floor(Math.random() * groundObstacles.length)];
@@ -1542,7 +1554,7 @@
                     game.items.push({
                         type: 'air',
                         x: cw + 40,
-                        y: groundY - 110 - Math.random() * 40,
+                        y: groundY - 115 - Math.random() * 30,
                         speed: 5,
                         emoji: Math.random() < 0.35 ? '⭐️' : '🪙',
                         hit: false
@@ -1550,13 +1562,14 @@
                 }
 
                 // Collisions for Jump Game
-                const playerX = playerFace ? noseX : cw / 2;
+                const playerX = noseX;
                 for (let i = game.items.length - 1; i >= 0; i--) {
                     let item = game.items[i];
                     item.x -= item.speed;
 
+                    // Ground obstacle: Must be physically jumping
                     if (item.type === 'ground' && !item.hit) {
-                        if (Math.abs(item.x - playerX) < 45) {
+                        if (Math.abs(item.x - playerX) < 48) {
                             if (game.isJumping) {
                                 item.hit = true;
                                 game.score += 20;
@@ -1565,7 +1578,7 @@
                                 game.jumpFeedback = '🦘 กระโดดพ้น! +20';
                                 game.jumpFeedbackColor = '#34d399';
                                 game.jumpFeedbackTimer = 28;
-                                addFloatingText('+20 JUMP!', playerX, groundY - 55, '#38bdf8');
+                                addFloatingText('+20 CLEARED!', playerX, groundY - 60, '#38bdf8');
                                 spawnParticles(playerX, groundY - 40, 8, '#38bdf8');
                                 soundManager.playScore();
                                 if (game.combo >= 2) soundManager.playCombo(game.combo);
@@ -1580,11 +1593,13 @@
                                 game.jumpFeedbackColor = '#f87171';
                                 game.jumpFeedbackTimer = 28;
                                 updateUI();
+                                if (!game.isRunning) break;
                             }
                         }
-                    } else if (item.type === 'air' && !item.hit && (playerFace || game.isJumping)) {
-                        const targetNoseY = playerFace ? noseY : (groundY - 35 - (game.isJumping ? 80 : 0));
-                        if (Math.hypot(item.x - playerX, item.y - targetNoseY) < 55) {
+                    }
+                    // Air item: Caught during jump
+                    else if (item.type === 'air' && !item.hit) {
+                        if (game.isJumping && Math.abs(item.x - playerX) < 55) {
                             item.hit = true;
                             game.score += 15;
                             game.combo++;
@@ -1592,7 +1607,7 @@
                             game.jumpFeedback = '✨ เก็บดาวลอยฟ้า! +15';
                             game.jumpFeedbackColor = '#fbbf24';
                             game.jumpFeedbackTimer = 25;
-                            addFloatingText('+15 STAR!', item.x, item.y, '#fbbf24');
+                            addFloatingText('+15 STAR! ⭐️', item.x, item.y, '#fbbf24');
                             spawnParticles(item.x, item.y, 8, '#fbbf24');
                             soundManager.playScore(true);
                             if (game.combo >= 2) soundManager.playCombo(game.combo);
@@ -1607,131 +1622,44 @@
                     }
                 }
             }
-
-            // Existing Item collision loop for sushi, dodge, smile
-            if (['sushi', 'dodge', 'smile'].includes(game.id)) {
-                for (let i = game.items.length - 1; i >= 0; i--) {
-                    let item = game.items[i];
-                    item.y += item.speed;
-                    if (game.id === 'sushi' && (playerFace || mouthX)) {
-                        if (Math.hypot(mouthX - item.x, mouthY - item.y) < 45 && isMouthOpen) {
-                            game.score += 10;
-                            game.combo++;
-                            if (game.combo > game.maxCombo) game.maxCombo = game.combo;
-                            addFloatingText('+10 YUM!', mouthX, mouthY - 25, '#fbbf24');
-                            spawnParticles(mouthX, mouthY, 7, '#fbbf24');
-                            soundManager.playScore(game.combo >= 3);
-                            if (game.combo >= 3) soundManager.playCombo(game.combo);
-                            updateUI();
-                            game.items.splice(i, 1);
-                            continue;
-                        }
-                        if (item.y > ch) {
-                            game.lives--;
-                            game.combo = 0;
-                            triggerDamageEffect();
-                            soundManager.playHit();
-                            updateUI();
-                            game.items.splice(i, 1);
-                            continue;
-                        }
-                    }
-                    if (game.id === 'dodge' && (playerFace || noseX)) {
-                        if (Math.hypot(noseX - item.x, noseY - item.y) < 45) {
-                            game.lives--;
-                            game.combo = 0;
-                            triggerDamageEffect();
-                            soundManager.playHit();
-                            updateUI();
-                            game.items.splice(i, 1);
-                            continue;
-                        }
-                        if (item.y > ch) {
-                            game.score += 10;
-                            game.combo++;
-                            if (game.combo > game.maxCombo) game.maxCombo = game.combo;
-                            if (game.combo % 3 === 0) {
-                                addFloatingText(`${game.combo}x COMBO!`, cw / 2, 140, '#38bdf8');
-                                soundManager.playCombo(game.combo);
-                            } else {
-                                soundManager.playScore();
-                            }
-                            updateUI();
-                            game.items.splice(i, 1);
-                            continue;
-                        }
-                    }
-                    if (game.id === 'smile' && (playerFace || noseX)) {
-                        if (Math.hypot(noseX - item.x, noseY - item.y) < 50) {
-                            if (isSmiling) {
-                                game.score += 20;
-                                game.combo++;
-                                if (game.combo > game.maxCombo) game.maxCombo = game.combo;
-                                addFloatingText('+20 SMILE! 😊', item.x, item.y, '#f472b6');
-                                spawnParticles(item.x, item.y, 8, '#f472b6');
-                                soundManager.playScore(true);
-                                if (game.combo >= 2) soundManager.playCombo(game.combo);
-                            } else {
-                                game.lives--;
-                                game.combo = 0;
-                                triggerDamageEffect();
-                                soundManager.playHit();
-                            }
-                            updateUI();
-                            game.items.splice(i, 1);
-                            continue;
-                        }
-                        if (item.y > ch) { game.items.splice(i, 1); continue; }
-                    }
-                }
-            }
         }
 
-        // --- High-Contrast Item Renderer (Guarantees 100% Visibility on Webcam) ---
+        // --- High-Contrast Item Renderer ---
         function drawGameItem(item) {
             ctx.save();
-
             let borderColor = '#ffffff';
             let bgColor = 'rgba(18, 18, 24, 0.94)';
             let glowColor = 'rgba(255, 255, 255, 0.35)';
             let radius = 28;
 
             if (item.type === 'ground' || game.id === 'dodge') {
-                // Hazard / obstacle: high-visibility glowing red badge
                 borderColor = '#ef4444';
                 bgColor = 'rgba(38, 10, 16, 0.95)';
                 glowColor = 'rgba(239, 68, 68, 0.8)';
                 radius = 28;
             } else if (item.type === 'air' || game.id === 'smile') {
-                // Gold / star: glowing amber badge
                 borderColor = '#fbbf24';
                 bgColor = 'rgba(38, 30, 8, 0.95)';
                 glowColor = 'rgba(251, 191, 36, 0.8)';
                 radius = 26;
             } else if (game.id === 'sushi') {
-                // Sushi: glowing coral/orange badge
                 borderColor = '#f97316';
                 bgColor = 'rgba(35, 18, 12, 0.95)';
                 glowColor = 'rgba(249, 115, 22, 0.8)';
                 radius = 28;
             }
 
-            // Outer glowing shadow
             ctx.shadowColor = glowColor;
             ctx.shadowBlur = 18;
-
-            // Solid dark background circle
             ctx.fillStyle = bgColor;
             ctx.beginPath();
             ctx.arc(item.x, item.y, radius, 0, Math.PI * 2);
             ctx.fill();
 
-            // Distinctive glowing border ring
             ctx.strokeStyle = borderColor;
             ctx.lineWidth = 3;
             ctx.stroke();
 
-            // Inner subtle specular highlight ring
             ctx.shadowBlur = 0;
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
             ctx.lineWidth = 1;
@@ -1739,14 +1667,12 @@
             ctx.arc(item.x, item.y, radius - 3, 0, Math.PI * 2);
             ctx.stroke();
 
-            // Crisp, high-contrast emoji with multi-system fallback font
             ctx.font = `${Math.round(radius * 1.35)}px 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillStyle = "#ffffff";
             ctx.fillText(item.emoji, item.x, item.y + 1);
 
-            // Ground obstacle danger hazard tag
             if (item.type === 'ground') {
                 ctx.font = "800 10px -apple-system, BlinkMacSystemFont, sans-serif";
                 ctx.fillStyle = "#ef4444";
@@ -1758,26 +1684,28 @@
             ctx.restore();
         }
 
+        // --- Render Loop ---
         function drawGame() {
             const cw = canvas.width, ch = canvas.height, vw = video.videoWidth || 640, vh = video.videoHeight || 480;
+
+            // 1. Draw camera video feed (mirrored selfie mode)
             if (latestFrame) {
                 const scale = Math.max(cw / vw, ch / vh);
                 const renderW = vw * scale, renderH = vh * scale;
                 const offsetX = (cw - renderW) / 2, offsetY = (ch - renderH) / 2;
-                ctx.save(); ctx.translate(cw, 0); ctx.scale(-1, 1);
+                ctx.save();
+                ctx.translate(cw, 0);
+                ctx.scale(-1, 1);
                 ctx.drawImage(latestFrame, 0, 0, vw, vh, cw - offsetX - renderW, offsetY, renderW, renderH);
                 ctx.restore();
             }
+
             if (!game.isRunning) return;
 
-            let noseX = 0, noseY = 0, mouthX = 0, mouthY = 0;
+            // 2. Face tracking reticle
             if (playerFace) {
                 const nose = getFacePointCoordinates(playerFace[1]);
-                noseX = nose.x; noseY = nose.y;
                 const mouth = getFacePointCoordinates(playerFace[13]);
-                mouthX = mouth.x; mouthY = mouth.y;
-
-                // --- 🎯 Futuristic Arcade Face Lock Reticle ---
                 const faceLeft = getFacePointCoordinates(playerFace[234]);
                 const faceRight = getFacePointCoordinates(playerFace[454]);
                 const faceTop = getFacePointCoordinates(playerFace[10]);
@@ -1788,132 +1716,99 @@
                 const minY = Math.min(faceTop.y, faceBottom.y) - 20;
                 const maxY = Math.max(faceTop.y, faceBottom.y) + 15;
                 const boxW = maxX - minX;
-                const boxH = maxY - minY;
                 const bracketLen = Math.min(18, boxW * 0.2);
 
                 ctx.save();
                 ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
                 ctx.lineWidth = 1.5;
 
-                // Top-Left bracket
+                // Brackets
                 ctx.beginPath();
                 ctx.moveTo(minX, minY + bracketLen); ctx.lineTo(minX, minY); ctx.lineTo(minX + bracketLen, minY);
-                ctx.stroke();
-
-                // Top-Right bracket
-                ctx.beginPath();
                 ctx.moveTo(maxX - bracketLen, minY); ctx.lineTo(maxX, minY); ctx.lineTo(maxX, minY + bracketLen);
-                ctx.stroke();
-
-                // Bottom-Left bracket
-                ctx.beginPath();
                 ctx.moveTo(minX, maxY - bracketLen); ctx.lineTo(minX, maxY); ctx.lineTo(minX + bracketLen, maxY);
-                ctx.stroke();
-
-                // Bottom-Right bracket
-                ctx.beginPath();
                 ctx.moveTo(maxX - bracketLen, maxY); ctx.lineTo(maxX, maxY); ctx.lineTo(maxX, maxY - bracketLen);
                 ctx.stroke();
 
-                // Face Lock Tag
                 ctx.font = "600 10px monospace";
-                ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
-                ctx.fillText("● AI LOCKED", minX + 4, minY - 6);
+                ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+                ctx.fillText("● AI FACE LOCKED", minX + 4, minY - 6);
                 ctx.restore();
 
                 // Mode-specific tracking circle
                 ctx.lineWidth = 2.5;
                 if (game.id === 'sushi') {
-                    ctx.beginPath(); ctx.arc(mouth.x, mouth.y + 10, 24, 0, 2 * Math.PI);
-                    ctx.strokeStyle = ((playerFace[14].y - playerFace[13].y) > 0.04) ? '#ffffff' : 'rgba(255, 255, 255, 0.4)'; ctx.stroke();
-                } else if (game.id === 'dodge') {
-                    ctx.beginPath(); ctx.arc(nose.x, nose.y, 28, 0, 2 * Math.PI); ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'; ctx.stroke();
-                } else if (game.id === 'smile') {
-                    const faceWidth = Math.abs(playerFace[234].x - playerFace[454].x);
-                    const isSmiling = (Math.abs(playerFace[291].x - playerFace[61].x) / faceWidth) > 0.45;
-                    ctx.beginPath(); ctx.arc(nose.x, nose.y, 30, 0, 2 * Math.PI);
-                    ctx.strokeStyle = isSmiling ? '#ffffff' : 'rgba(255, 255, 255, 0.4)'; ctx.stroke();
-                } else if (game.id === 'pose') {
-                    ctx.beginPath(); ctx.arc(nose.x, nose.y, 38, 0, 2 * Math.PI);
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                    const isMouthOpen = (playerFace[14].y - playerFace[13].y) > 0.042;
+                    ctx.beginPath();
+                    ctx.arc(mouth.x, mouth.y + 10, 26, 0, 2 * Math.PI);
+                    ctx.strokeStyle = isMouthOpen ? '#34d399' : 'rgba(255, 255, 255, 0.45)';
+                    ctx.lineWidth = isMouthOpen ? 3.5 : 2;
                     ctx.stroke();
+
+                    ctx.font = "600 12px -apple-system, BlinkMacSystemFont, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillStyle = isMouthOpen ? '#34d399' : '#a1a1aa';
+                    ctx.fillText(isMouthOpen ? "😮 OPEN!" : "MOUTH", mouth.x, mouth.y + 48);
+                } else if (game.id === 'dodge') {
+                    ctx.beginPath();
+                    ctx.arc(nose.x, nose.y, 28, 0, 2 * Math.PI);
+                    ctx.strokeStyle = '#38bdf8';
+                    ctx.lineWidth = 2.5;
+                    ctx.stroke();
+
+                    ctx.font = "600 12px -apple-system, BlinkMacSystemFont, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillText("HEAD LOCK", nose.x, nose.y - 36);
+                } else if (game.id === 'smile') {
+                    const faceWidth = Math.abs(playerFace[234].x - playerFace[454].x) || 0.1;
+                    const isSmiling = (Math.abs(playerFace[291].x - playerFace[61].x) / faceWidth) > 0.44;
+                    ctx.beginPath();
+                    ctx.arc(nose.x, nose.y, 30, 0, 2 * Math.PI);
+                    ctx.strokeStyle = isSmiling ? '#f472b6' : 'rgba(255, 255, 255, 0.4)';
+                    ctx.lineWidth = isSmiling ? 3.5 : 2;
+                    ctx.stroke();
+
+                    ctx.font = "600 12px -apple-system, BlinkMacSystemFont, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillStyle = isSmiling ? '#f472b6' : '#a1a1aa';
+                    ctx.fillText(isSmiling ? "😊 SMILING!" : "SMILE HERE", nose.x, nose.y - 38);
                 } else if (game.id === 'jump') {
-                    const visualY = (game.manualJumpTimer > 0) ? nose.y - 45 : nose.y;
-                    ctx.beginPath(); ctx.arc(nose.x, visualY, 32, 0, 2 * Math.PI);
-                    ctx.strokeStyle = game.isJumping ? '#38bdf8' : 'rgba(255, 255, 255, 0.35)';
+                    ctx.beginPath();
+                    ctx.arc(nose.x, nose.y, 32, 0, 2 * Math.PI);
+                    ctx.strokeStyle = game.isJumping ? '#38bdf8' : 'rgba(255, 255, 255, 0.4)';
                     ctx.lineWidth = game.isJumping ? 4 : 2;
                     ctx.stroke();
 
-                    ctx.font = "600 13px -apple-system, BlinkMacSystemFont, sans-serif";
+                    ctx.font = "700 13px -apple-system, BlinkMacSystemFont, sans-serif";
                     ctx.textAlign = "center";
-                    ctx.fillStyle = game.isJumping ? '#38bdf8' : '#71717a';
-                    ctx.fillText(game.isJumping ? "JUMP!" : "READY", nose.x, visualY - 42);
+                    ctx.fillStyle = game.isJumping ? '#38bdf8' : '#a1a1aa';
+                    ctx.fillText(game.isJumping ? "🦘 JUMPING!" : "READY", nose.x, nose.y - 42);
                 }
-            }
-
-            // Fallback player rendering when face tracking is not active or using keyboard/tap
-            if (!playerFace && game.id === 'jump') {
-                const groundY = ch - 115;
-                const playerX = cw / 2;
-                const jumpOffset = game.isJumping ? 80 : 0;
-                const playerY = groundY - 35 - jumpOffset;
-
+            } else {
+                // Warning if face is out of camera view
                 ctx.save();
-                ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+                ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
                 ctx.beginPath();
-                ctx.ellipse(playerX, groundY - 4, game.isJumping ? 12 : 24, 6, 0, 0, Math.PI * 2);
+                ctx.roundRect ? ctx.roundRect(cw / 2 - 140, 75, 280, 36, 12) : ctx.rect(cw / 2 - 140, 75, 280, 36);
                 ctx.fill();
-
-                ctx.fillStyle = game.isJumping ? "rgba(56, 189, 248, 0.95)" : "rgba(24, 24, 32, 0.95)";
-                ctx.shadowColor = game.isJumping ? "rgba(56, 189, 248, 0.8)" : "rgba(255, 255, 255, 0.3)";
-                ctx.shadowBlur = 15;
-                ctx.beginPath();
-                ctx.arc(playerX, playerY, 28, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.strokeStyle = game.isJumping ? "#38bdf8" : "#ffffff";
-                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
                 ctx.stroke();
-
-                ctx.font = "28px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
+                ctx.font = "600 12px -apple-system, BlinkMacSystemFont, sans-serif";
                 ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillStyle = "#ffffff";
-                ctx.fillText("🦘", playerX, playerY);
-
-                ctx.font = "600 11px -apple-system, BlinkMacSystemFont, sans-serif";
-                ctx.fillStyle = game.isJumping ? "#38bdf8" : "#a1a1aa";
-                ctx.fillText(game.isJumping ? "JUMPING!" : "YOU", playerX, playerY - 38);
-                ctx.restore();
-            } else if (!playerFace && game.id === 'dodge') {
-                const playerX = (cw / 2) + game.dodgeOffsetX;
-                const playerY = ch * 0.7;
-                ctx.save();
-                ctx.fillStyle = "rgba(24, 24, 32, 0.95)";
-                ctx.shadowColor = "rgba(56, 189, 248, 0.6)";
-                ctx.shadowBlur = 12;
-                ctx.beginPath();
-                ctx.arc(playerX, playerY, 28, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = "#38bdf8";
-                ctx.lineWidth = 2.5;
-                ctx.stroke();
-                ctx.font = "28px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillStyle = "#ffffff";
-                ctx.fillText("😎", playerX, playerY);
+                ctx.fillStyle = "#fbbf24";
+                ctx.fillText("⚠️ กรุณาส่องใบหน้าให้อยู่ในกรอบกล้อง", cw / 2, 98);
                 ctx.restore();
             }
 
-            // Draw items for falling games (sushi, dodge, smile) with contrasting badges
+            // 3. Falling items for sushi, dodge, smile
             if (['sushi', 'dodge', 'smile'].includes(game.id)) {
                 game.items.forEach(item => {
                     drawGameItem(item);
                 });
             }
 
-            // --- Draw Specific Elements for POSE Game ---
+            // 4. Draw POSE Game Elements
             if (game.id === 'pose' && game.currentPose) {
                 const cardW = Math.min(320, cw - 40);
                 const cardH = 88;
@@ -1961,49 +1856,76 @@
                 if (game.poseFeedbackTimer > 0) {
                     ctx.font = "600 18px -apple-system, BlinkMacSystemFont, sans-serif";
                     ctx.textAlign = "center";
-                    ctx.fillStyle = "#ffffff";
+                    ctx.fillStyle = game.poseFeedbackColor;
                     ctx.fillText(game.poseFeedback, cw / 2, cardY + cardH + 30);
                 }
                 ctx.restore();
             }
 
-            // --- Draw Specific Elements for JUMP Game ---
+            // 5. Draw JUMP Game Elements (Physical Jump Arena)
             if (game.id === 'jump') {
                 const groundY = ch - 115;
-
                 ctx.save();
 
-                // Cyber arcade ground floor
-                ctx.fillStyle = 'rgba(10, 10, 15, 0.75)';
+                // Cyber ground floor
+                ctx.fillStyle = 'rgba(10, 10, 15, 0.8)';
                 ctx.fillRect(0, groundY, cw, ch - groundY);
 
-                // Prominent ground border line
+                // Ground border line
                 ctx.beginPath();
                 ctx.moveTo(0, groundY);
                 ctx.lineTo(cw, groundY);
-                ctx.strokeStyle = '#ffffff';
+                ctx.strokeStyle = '#38bdf8';
                 ctx.lineWidth = 2.5;
                 ctx.stroke();
 
-                // Jump Target Baseline
+                // Jump Goal Baseline
                 if (game.jumpBaselineY !== null) {
                     const jumpTargetY = game.jumpBaselineY - game.jumpThreshold;
                     ctx.beginPath();
                     ctx.setLineDash([5, 5]);
                     ctx.moveTo(20, jumpTargetY);
                     ctx.lineTo(cw - 20, jumpTargetY);
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+                    ctx.strokeStyle = game.isJumping ? '#38bdf8' : 'rgba(255, 255, 255, 0.35)';
                     ctx.lineWidth = 1.5;
                     ctx.stroke();
                     ctx.setLineDash([]);
 
-                    ctx.font = "600 10px -apple-system, BlinkMacSystemFont, sans-serif";
-                    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+                    ctx.font = "700 10px monospace";
+                    ctx.fillStyle = game.isJumping ? '#38bdf8' : 'rgba(255, 255, 255, 0.6)';
                     ctx.textAlign = "right";
-                    ctx.fillText("JUMP GOAL", cw - 24, jumpTargetY - 5);
+                    ctx.fillText("🏁 JUMP GOAL", cw - 24, jumpTargetY - 5);
                 }
 
-                // Approaching obstacle warning indicator
+                // Kangaroo Runner Avatar on the Ground Track
+                const runnerX = playerFace ? getFacePointCoordinates(playerFace[1]).x : cw / 2;
+                const runnerJumpOffset = game.isJumping ? 65 : 0;
+                const runnerY = groundY - 32 - runnerJumpOffset;
+
+                // Shadow
+                ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+                ctx.beginPath();
+                ctx.ellipse(runnerX, groundY - 4, game.isJumping ? 12 : 24, 6, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Runner Circle
+                ctx.fillStyle = game.isJumping ? "rgba(56, 189, 248, 0.95)" : "rgba(24, 24, 32, 0.95)";
+                ctx.shadowColor = game.isJumping ? "rgba(56, 189, 248, 0.8)" : "rgba(255, 255, 255, 0.3)";
+                ctx.shadowBlur = 15;
+                ctx.beginPath();
+                ctx.arc(runnerX, runnerY, 26, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = game.isJumping ? "#38bdf8" : "#ffffff";
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                ctx.font = "26px 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("🦘", runnerX, runnerY);
+
+                // Approaching warning
                 const approachingObs = game.items.find(i => i.type === 'ground' && i.x > cw - 70 && i.x <= cw + 60);
                 if (approachingObs) {
                     ctx.font = "800 12px -apple-system, BlinkMacSystemFont, sans-serif";
@@ -2012,12 +1934,12 @@
                     ctx.fillText("⚠️ INCOMING! ◀", cw - 12, groundY - 30);
                 }
 
-                // Draw all items with high-contrast glowing badges
+                // Draw ground obstacles and air items
                 game.items.forEach(item => {
                     drawGameItem(item);
                 });
 
-                // Jump Height Meter
+                // Vertical Jump Height Power Meter
                 const meterH = 100;
                 const meterW = 6;
                 const meterX = 16;
@@ -2028,21 +1950,26 @@
                 ctx.lineWidth = 1;
                 ctx.strokeRect(meterX, meterY, meterW, meterH);
 
-                const currentRatio = Math.min(1, game.jumpHeight / (game.jumpThreshold * 1.6));
-                ctx.fillStyle = game.isJumping ? "#ffffff" : "rgba(255, 255, 255, 0.4)";
+                const currentRatio = Math.min(1, game.jumpHeight / (game.jumpThreshold * 1.5));
+                ctx.fillStyle = game.isJumping ? "#38bdf8" : "rgba(255, 255, 255, 0.4)";
                 ctx.fillRect(meterX, meterY + meterH * (1 - currentRatio), meterW, meterH * currentRatio);
 
+                ctx.font = "600 9px monospace";
+                ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+                ctx.textAlign = "left";
+                ctx.fillText("JUMP", meterX, meterY - 6);
+
                 if (game.jumpFeedbackTimer > 0) {
-                    ctx.font = "600 17px -apple-system, BlinkMacSystemFont, sans-serif";
+                    ctx.font = "700 17px -apple-system, BlinkMacSystemFont, sans-serif";
                     ctx.textAlign = "center";
-                    ctx.fillStyle = "#ffffff";
+                    ctx.fillStyle = game.jumpFeedbackColor;
                     ctx.fillText(game.jumpFeedback, cw / 2, groundY - 70);
                 }
 
                 ctx.restore();
             }
 
-            // --- ✨ Update & Draw Particles FX ---
+            // 6. Update & Draw Particles FX
             for (let i = game.particles.length - 1; i >= 0; i--) {
                 const p = game.particles[i];
                 p.x += p.vx;
@@ -2065,7 +1992,7 @@
                 ctx.restore();
             }
 
-            // --- 💬 Update & Draw Floating Score Texts ---
+            // 7. Update & Draw Floating Score Texts
             for (let i = game.floatingTexts.length - 1; i >= 0; i--) {
                 const ft = game.floatingTexts[i];
                 ft.y += ft.vy;
@@ -2105,24 +2032,46 @@
             try {
                 faceMesh = new FaceMesh({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}` });
                 faceMesh.setOptions({ maxNumFaces: 1, refineLandmarks: false, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+
+                let aiReady = false;
+                const markAIReady = () => {
+                    if (aiReady) return;
+                    aiReady = true;
+                    isAILoaded = true;
+                    document.getElementById('loadingUI').classList.add('hidden');
+                    document.getElementById('loadingUI').classList.remove('flex');
+                    updateCanvasDimensions();
+                    requestAnimationFrame(gameLoop);
+                    runCountdownAndStart();
+                };
+
                 faceMesh.onResults((results) => {
                     latestFrame = results.image;
                     if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                         playerFace = results.multiFaceLandmarks[0];
-                        if (!isAILoaded) {
-                            isAILoaded = true;
-                            document.getElementById('loadingUI').classList.add('hidden');
-                            document.getElementById('loadingUI').classList.remove('flex');
-                            updateCanvasDimensions();
-                            requestAnimationFrame(gameLoop);
-                            runCountdownAndStart();
-                        }
-                    } else { playerFace = null; }
+                    } else {
+                        playerFace = null;
+                    }
+                    if (!aiReady) {
+                        markAIReady();
+                    }
                 });
-                camera = new Camera(video, { onFrame: async () => { await faceMesh.send({ image: video }); }, width: 640, height: 480, facingMode: 'user' });
+
+                camera = new Camera(video, {
+                    onFrame: async () => { await faceMesh.send({ image: video }); },
+                    width: 640,
+                    height: 480,
+                    facingMode: 'user'
+                });
                 await camera.start();
+
+                // Safety timeout fallback: ready up within 2.2s even before face enters camera
+                setTimeout(() => {
+                    if (!aiReady) markAIReady();
+                }, 2200);
+
             } catch (err) {
-                console.warn("Camera/AI init fallback to manual controls:", err);
+                console.warn("Camera/AI init fallback:", err);
                 isAILoaded = true;
                 document.getElementById('loadingUI').classList.add('hidden');
                 document.getElementById('loadingUI').classList.remove('flex');
@@ -2132,93 +2081,69 @@
             }
         }
 
-        // --- Universal Input Controls (Touch, Mouse, Keyboard) ---
+        // --- Keyboard Controls (Menu Navigation & Escape Only; Zero click gameplay) ---
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Escape') {
-                if (game.isRunning) backToMenu(e);
+                backToMenu(e);
                 return;
             }
-            if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
-                e.preventDefault();
-                if (game.isRunning) {
-                    triggerPlayerAction();
-                } else if (!document.getElementById('gameOverUI').classList.contains('hidden')) {
+            // Space / Enter only allowed for UI actions (Start Game / Restart Game)
+            if (e.code === 'Space' || e.code === 'Enter') {
+                const gameOverUI = document.getElementById('gameOverUI');
+                const menuPanel = document.getElementById('menuPanel');
+                if (gameOverUI && !gameOverUI.classList.contains('hidden')) {
                     restartGame();
-                } else if (!document.getElementById('menuPanel').classList.contains('translate-y-full')) {
+                } else if (menuPanel && !menuPanel.classList.contains('translate-y-full') && !menuPanel.classList.contains('hidden')) {
                     startGame();
                 }
-            } else if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
-                if (game.isRunning && game.id === 'dodge') triggerDodgeLeft();
-            } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
-                if (game.isRunning && game.id === 'dodge') triggerDodgeRight();
             }
         });
 
-        // Click or Tap anywhere on the game canvas triggers player action
-        canvas.addEventListener('click', (e) => {
-            if (game.isRunning) triggerPlayerAction(e);
-        });
-        canvas.addEventListener('touchstart', (e) => {
-            if (game.isRunning) triggerPlayerAction(e);
-        }, { passive: true });
+        // --- Desktop Drag to Scroll (For horizontal scroll containers) ---
+        document.querySelectorAll('.overflow-x-auto').forEach(slider => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
 
-        // Auto-select first game card so Start Game button is immediately active
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.classList.add('cursor-grabbing');
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.classList.remove('cursor-grabbing');
+            });
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('cursor-grabbing');
+            });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll-fast
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        });
+
+        // Auto-select first game card initially without triggering sound
         const initDefaultCard = document.querySelector('.game-card');
         if (initDefaultCard) {
-            selectGame('sushi', initDefaultCard);
+            selectGame('sushi', initDefaultCard, false);
         }
 
-        // --- Desktop Simulator Device Mode Switcher ---
-        function setDeviceMode(mode) {
-            const frame = document.getElementById('deviceFrame');
-            if (!frame) return;
-
-            document.querySelectorAll('.device-btn').forEach(btn => {
-                btn.classList.remove('bg-white/20', 'text-white', 'border-white/30');
-                btn.classList.add('text-neutral-400');
-            });
-
-            const activeBtn = document.getElementById(`btn-mode-${mode}`);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-neutral-400');
-                activeBtn.classList.add('bg-white/20', 'text-white', 'border-white/30');
-            }
-
-            if (mode === 'standard') { // 390 x 844
-                frame.style.width = '390px';
-                frame.style.height = '844px';
-                frame.style.maxHeight = 'calc(100vh - 68px)';
-                frame.className = "device-chassis relative transition-all duration-300 w-full h-[100dvh] md:w-[390px] md:h-[844px] md:max-h-[calc(100vh-68px)] bg-black overflow-hidden flex flex-col shadow-2xl";
-            } else if (mode === 'compact') { // 360 x 780
-                frame.style.width = '360px';
-                frame.style.height = '780px';
-                frame.style.maxHeight = 'calc(100vh - 68px)';
-                frame.className = "device-chassis relative transition-all duration-300 w-full h-[100dvh] md:w-[360px] md:h-[780px] md:max-h-[calc(100vh-68px)] bg-black overflow-hidden flex flex-col shadow-2xl";
-            } else if (mode === 'promax') { // 430 x 932
-                frame.style.width = '430px';
-                frame.style.height = '932px';
-                frame.style.maxHeight = 'calc(100vh - 68px)';
-                frame.className = "device-chassis relative transition-all duration-300 w-full h-[100dvh] md:w-[430px] md:h-[932px] md:max-h-[calc(100vh-68px)] bg-black overflow-hidden flex flex-col shadow-2xl";
-            } else if (mode === 'fullscreen') {
-                frame.style.width = '100%';
-                frame.style.height = '100vh';
-                frame.style.maxHeight = 'none';
-                frame.className = "w-full h-full relative transition-all duration-300 bg-black overflow-hidden flex flex-col";
-            }
-
-            setTimeout(() => {
-                updateCanvasDimensions();
-            }, 320);
-        }
-
-        // Web Audio Mobile Gesture Unlock Handler
-        const unlockMobileAudio = () => {
+        // Web Audio Gesture Unlock
+        const unlockAudio = () => {
             soundManager.init();
-            document.removeEventListener('touchstart', unlockMobileAudio);
-            document.removeEventListener('click', unlockMobileAudio);
+            document.removeEventListener('touchstart', unlockAudio);
+            document.removeEventListener('click', unlockAudio);
+            document.removeEventListener('keydown', unlockAudio);
         };
-        document.addEventListener('touchstart', unlockMobileAudio, { passive: true });
-        document.addEventListener('click', unlockMobileAudio, { passive: true });
+        document.addEventListener('touchstart', unlockAudio, { passive: true });
+        document.addEventListener('click', unlockAudio, { passive: true });
+        document.addEventListener('keydown', unlockAudio, { passive: true });
     </script>
 </body>
 

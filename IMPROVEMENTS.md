@@ -9,8 +9,8 @@
 | ส่วนของโปรเจกต์ (Component) | โค้ดตั้งต้นจาก Git | สิ่งที่ปรับปรุงและพัฒนาเพิ่มขึ้นมา |
 | :--- | :--- | :--- |
 | **1. Backend & Database** (`my-api/main.py`) | มีเฉพาะตาราง `users` และ 11 API Endpoints สำหรับ Auth/User | <ul><li>สร้างตาราง `scores` บันทึกประวัติคะแนน</li><li>ทำ **Composite B-Tree Index** เร่งความเร็ว Leaderboard</li><li>เพิ่ม 3 Endpoints ใหม่สำหรับระบบคะแนน</li><li>ปรับปรุง Pagination ด้วย Primary Key Index</li></ul> |
-| **2. Game Engine & WebAR** (`my-frontend/game.html`) | มี 3 มินิเกมพื้นฐาน, บังคับใช้กล้องเว็บแคมอย่างเดียว, ไม่มีเสียง | <ul><li>**เพิ่ม 2 มินิเกมใหม่** (ทำท่าโจทย์ 🎭 และกระโดด 🦘)</li><li>ระบบ **Dual Controls** (เล่นได้ทั้งใบหน้า, จอสัมผัส, เมาส์, คีย์บอร์ด)</li><li>ระบบเสียงสังเคราะห์ **Web Audio API** (ไม่ต้องใช้ไฟล์ MP3)</li><li>ระบบ Visual Effects (Screen Shake, Particles, Floating Text)</li><li>ปรับไอเทม/สิ่งกีดขวางเป็น **High-Contrast Badges**</li><li>เพิ่มหน้าต่าง **ตารางอันดับคะแนน (Leaderboard Modal)**</li><li>แก้ไข Syntax Error และเพิ่ม **Camera Fallback**</li></ul> |
-| **3. Mobile & Desktop Simulator** | แสดงผลหน้าจอแบบฟิกเกอร์เดิมของคอมพิวเตอร์ | <ul><li>รองรับ **Mobile-First Responsive** เต็มหน้าจอมือถือ</li><li>เพิ่มแถบ **Desktop Simulator Bar** ด้านบนสำหรับสลับจำลองขนาด (iPhone / Android / Pro Max / Fullscreen)</li></ul> |
+| **2. Game Engine & WebAR** (`my-frontend/game.html`) | มี 3 มินิเกมพื้นฐาน, บังคับใช้กล้องเว็บแคมอย่างเดียว, ไม่มีเสียง | <ul><li>**เพิ่ม 2 มินิเกมใหม่** (ทำท่าโจทย์ 🎭 และกระโดด 🦘)</li><li>ระบบ **100% Face & Physical Controls** (บังคับด้วยใบหน้าและท่าทางจริงเท่านั้น)</li><li>ระบบเสียงสังเคราะห์ **Web Audio API** (ไม่ต้องใช้ไฟล์ MP3)</li><li>ระบบ Visual Effects (Screen Shake, Particles, Floating Text)</li><li>ปรับไอเทม/สิ่งกีดขวางเป็น **High-Contrast Badges**</li><li>เพิ่มหน้าต่าง **ตารางอันดับคะแนน (Leaderboard Modal)**</li><li>แก้ไข Syntax Error และเพิ่ม **Camera Fallback**</li></ul> |
+| **3. Responsive UI** | หน้าจอไม่พอดีอุปกรณ์ | <ul><li>รองรับ **Auto-Responsive** ปรับขนาด UI ให้พอดีกับอุปกรณ์ของผู้ใช้อัตโนมัติ 100%</li></ul> |
 | **4. Auth & UI Design System** (`index.html`, `register.html`) | ดีไซน์สีฉูดฉาดแบบเรียบง่าย ปุ่มนิ่งเฉยเวลาคลิก | <ul><li>ยกเครื่องเป็นดีไซน์ **Minimal Cyber-Arcade** คุมโทน Obsidian</li><li>ปุ่มและแผ่นการ์ดสไตล์ **3D Tactile** มีมิติการกด</li><li>เพิ่มการแสดงสถานะกำลังโหลดบนปุ่ม ป้องกันการกดซ้ำ</li><li>ปรับปรุง `API_URL` ให้ยืดหยุ่นต่อทุก Hostname และโปรโตคอล</li></ul> |
 
 ---
@@ -55,16 +55,15 @@ CREATE TABLE IF NOT EXISTS scores (
 ### 2.1 เพิ่ม 2 มินิเกมใหม่ (รวมเป็น 5 โหมดเกม)
 จากเดิมที่มีเพียง 3 เกม (กินซูชิ 🍣, หลบงาน 📁, ยิ้มรับทรัพย์ 💰) ได้พัฒนาเพิ่มเติมอีก 2 เกม:
 1. 🎭 **ทำท่าโจทย์ (Pose Matcher)**:
-   - ระบบสุ่มท่าทางโจทย์แบบไดนามิก เช่น อ้าปาก, ฉีกยิ้มกว้าง, เอียงคอซ้าย, เอียงคอขวา, ขยิบตาข้างเดียว, เงยหน้า
+   - ระบบสุ่มท่าทางโจทย์แบบไดนามิก เช่น อ้าปาก, ฉีกยิ้มกว้าง, เอียงคอซ้าย, เอียงคอขวา, ทำปากจู๋, เงยหน้า
    - มีหลอดเวลาจำกัด และตรวจจับองศาใบหน้า (Facial Landmarks) ผ่าน MediaPipe เพื่อให้คะแนน
 2. 🦘 **กระโดดข้ามรั้ว (Jump & Run)**:
    - เกมแนว Endless Runner มีสิ่งกีดขวางภาคพื้นดินพุ่งเข้ามา และมีไอเทมดาวลอยอยู่กลางอากาศ
    - ตรวจจับการกระโดดจริงด้วยการขยับศีรษะผ่านเส้น Baseline หรือกด Spacebar/แตะหน้าจอ
    - มีมาตรวัดความสูงการกระโดด (Jump Meter) และสัญญาณเตือนอันตรายล่วงหน้า (`⚠️ INCOMING!`)
 
-### 2.2 ระบบควบคุมคู่ (Dual Control System)
-- **Face AI**: ควบคุมด้วยการเคลื่อนไหวของใบหน้าผ่าน MediaPipe Face Mesh
-- **Manual Overrides**: รองรับการแตะหน้าจอมือถือ (Touch), การคลิกเมาส์, และปุ่มคีย์บอร์ด (Spacebar, ปุ่มลูกศร ซ้าย-ขวา / A-D, ปุ่ม Esc เพื่อกลับเมนู) ช่วยให้เล่นและทดสอบระบบได้แม้ไม่มีกล้อง
+### 2.2 ระบบควบคุมด้วย AI แบบ 100% (Pure AI Controls)
+- **Face AI & Physical Movement**: ยกเลิกระบบควบคุมด้วยการคลิกหรือหน้าจอสัมผัสทั้งหมด เพื่อให้ผู้เล่นเล่นเกมด้วยใบหน้าอย่างเดียว และในส่วนของเกมกระโดดจะใช้การจับการกระโดดด้วยร่างกายจริงเท่านั้น
 
 ### 2.3 การปรับปรุงการมองเห็นไอเทมและสิ่งกีดขวาง (Visual Clarity)
 - ปรับเปลี่ยนจากอิโมจิลอยแบบโปร่งใส มาเป็น **High-Contrast Badges**: มีกรอบวงกลมทึบและแสงเรืองรอบนอก (Outer Glow)
@@ -89,21 +88,16 @@ CREATE TABLE IF NOT EXISTS scores (
 ### 2.7 การแก้ปัญหาความเสถียร (Bug Fixes & Resilience)
 - **แก้ปัญหา Syntax Error (Unmatched Brace)**: ล้างโค้ดฟังก์ชันซ้ำซ้อนใน `game.html` แก้ปัญหาที่เคยกดปุ่มแล้วไม่ทำงาน
 - **Graceful Camera Fallback**: หากอุปกรณ์ไม่มีกล้อง หรือยังไม่อนุญาตสิทธิ์กล้อง ระบบจะไม่ค้างหน้าโหลด แต่จะสลับเข้าสู่โหมด Touch/Keyboard ทันที
+- **Live Reload Frontend (Docker Volume)**: เพิ่ม Volume Mapping สำหรับ `my-frontend` ใน `docker-compose.yml` เพื่อให้การแก้ไขโค้ดฝั่งหน้าบ้านอัปเดตแบบเรียลไทม์โดยไม่ต้อง Build Image ใหม่ทุกครั้ง
+- **Port Conflict Resolution**: เปลี่ยนพอร์ตของ Frontend จาก `8080` เป็น `3000` เพื่อหลีกเลี่ยงการชนกับ Service อื่นๆ ในระบบ (เช่น Python หรือ Jenkins ที่มักจองพอร์ต 8080)
 
 ---
 
-## 📱 ส่วนที่ 3: ระบบการแสดงผลและรองรับมือถือ (Mobile & Simulator)
+## 📱 ส่วนที่ 3: ระบบการแสดงผลอัตโนมัติ (Auto-Responsive UI)
 
-### 3.1 Mobile-First Responsive Design
-- ออกแบบให้รองรับขนาดหน้าจอมือถืออย่างสมบูรณ์แบบ (`viewport-fit=cover`, `touch-action: manipulation`, รองรับ Safe Area Inset)
-- ตัวเกมรันแบบ Fullscreen เสมือน Native Web App เมื่อเปิดบนเบราว์เซอร์มือถือ
-
-### 3.2 Desktop Simulator Hub Bar
-- มีแถบเมนูด้านบนบนหน้าจอคอมพิวเตอร์ เพื่อให้นักพัฒนาสามารถทดสอบการแสดงผลบนขนาดหน้าจอมือถือจริงได้ทันที:
-  - 📱 **iPhone** (390 × 844 px)
-  - 📱 **Android** (360 × 780 px)
-  - 📱 **Pro Max** (430 × 932 px)
-  - 🖥️ **เต็มจอ (Fullscreen)**
+### 3.1 Seamless Auto-Fit Design
+- ปรับเปลี่ยนให้ UI ปรับขนาดให้เหมาะกับอุปกรณ์ของผู้ใช้อัตโนมัติ (Auto-Responsive) เต็มรูปแบบ โดยไม่ต้องสลับโหมดจำลองเอง
+- โครงสร้างแอปใช้ `100dvh` ทำให้เกมแสดงผลแบบ Fullscreen พอดีเป๊ะเสมือน Native App ไม่ว่าจะเปิดในคอมพิวเตอร์หรือสมาร์ทโฟน
 
 ---
 
